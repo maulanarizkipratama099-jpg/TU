@@ -272,7 +272,7 @@
                                 <input type="text" id="bimbingan-solusi" placeholder="Solusi" class="md:col-span-2 px-3 py-2 border rounded-lg dark:bg-gray-800" required>
                                 <button type="submit" class="bg-school-main text-white px-4 py-2 rounded-lg md:col-span-2">Simpan Catatan</button>
                             </form>
-                            <div class="overflow-x-auto"><table class="admin-table"><thead><tr><th>Tanggal</th><th>Siswa</th><th>Kelas</th><th>Jenis</th><th>Masalah</th><th>Solusi</th><th width="8%">Aksi</th> </thead><tbody id="table-bimbingan"></tbody> </div>
+                            <div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th>Tanggal</th><th>Siswa</th><th>Kelas</th><th>Jenis</th><th>Masalah</th><th>Solusi</th><th width="8%">Aksi</th> </tr></thead><tbody id="table-bimbingan"></tbody> </table></div>
                         </div>
                     </div>
                 </div>
@@ -394,9 +394,7 @@
         // ============================================
         // KONFIGURASI - GANTI DENGAN URL APPS SCRIPT ANDA
         // ============================================
-        // SETELAH DEPLOY APPS SCRIPT, COPY URL NYA DISINI
-        // Contoh: https://script.google.com/macros/s/AKfycbyXXXXXXXXXXXX/exec
-        let GAS_URL = "https://script.google.com/macros/s/AKfycbw2gllJM4cvKtf7RpGpodyQAHxv9iXT98MdtoCEoQReWC-RH60BtDb_jQZqqY6AMJ37/exec";
+        let GAS_URL = "https://script.google.com/macros/s/AKfycbxB1zkBSVTD_1vTNdwY3y_nILpMp1SdLb4X_wCLk6GqzDRqSRc0517tG0cwP_8TUCxB/exec";
         
         // Database lokal
         let db = {
@@ -447,6 +445,36 @@
         
         function retrySync() { syncFromCloud(); }
         
+        // ============================================
+        // FUNGSI FETCH DENGAN CORS HANDLER
+        // ============================================
+        
+        async function fetchWithCors(url, options = {}) {
+            try {
+                const fetchOptions = {
+                    ...options,
+                    mode: 'cors',
+                    credentials: 'omit',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        ...(options.headers || {})
+                    }
+                };
+                
+                const response = await fetch(url, fetchOptions);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error("Fetch error:", error);
+                throw error;
+            }
+        }
+        
         async function sendToServer(action, payload) {
             if (!GAS_URL) {
                 showToast("URL Apps Script belum diatur!", "error");
@@ -455,21 +483,11 @@
             
             updateSyncStatus("loading");
             try {
-                const response = await fetch(GAS_URL, {
+                const result = await fetchWithCors(GAS_URL, {
                     method: "POST",
-                    mode: "cors",
-                    headers: { 
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                    },
                     body: JSON.stringify({ action, payload })
                 });
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-                
-                const result = await response.json();
                 updateSyncStatus("success");
                 
                 if (result.status === "success") {
@@ -499,16 +517,7 @@
             updateSyncStatus("loading");
             
             try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 15000);
-                const response = await fetch(`${GAS_URL}?action=all`, { 
-                    signal: controller.signal,
-                    mode: "cors"
-                });
-                clearTimeout(timeoutId);
-                
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const result = await response.json();
+                const result = await fetchWithCors(`${GAS_URL}?action=all`);
                 
                 if (result.status === "success") {
                     db.siswa = result.data.data_siswa || [];
@@ -569,21 +578,14 @@
         }
         
         // ============================================
-        // RENDER FUNCTIONS
+        // RENDER FUNCTIONS (SINGKAT - SAMA SEPERTI SEBELUMNYA)
         // ============================================
         
         function renderSiswa() {
             document.getElementById("table-siswa").innerHTML = db.siswa.map((s, i) => `
-                <tr>
-                    <td class="text-center">${i+1}</td>
-                    <td>${s.NISN}</td>
-                    <td>${s['Nama Siswa']}</td>
-                    <td>${s.Kelas}</td>
-                    <td>
-                        <button class="action-btn btn-edit" onclick="editSiswa('${s.ID}')"><i class="fa-solid fa-pen"></i> Edit</button>
-                        <button class="action-btn btn-delete" onclick="hapusSiswa('${s.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button>
-                    </td>
-                </tr>
+                <tr><td class="text-center">${i+1}</td><td>${s.NISN}</td><td>${s['Nama Siswa']}</td><td>${s.Kelas}</td>
+                <td><button class="action-btn btn-edit" onclick="editSiswa('${s.ID}')"><i class="fa-solid fa-pen"></i> Edit</button>
+                <button class="action-btn btn-delete" onclick="hapusSiswa('${s.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button></td></tr>
             `).join("");
         }
         
@@ -627,21 +629,13 @@
         document.getElementById("form-siswa")?.addEventListener("submit", async (e) => {
             e.preventDefault();
             const editId = document.getElementById("edit-siswa-id").value;
-            const payload = { 
-                ID: editId || Date.now().toString(), 
-                NISN: document.getElementById("nisn").value, 
-                "Nama Siswa": document.getElementById("nama-siswa").value, 
-                Kelas: document.getElementById("kelas-siswa").value 
-            };
-            
+            const payload = { ID: editId || Date.now().toString(), NISN: document.getElementById("nisn").value, "Nama Siswa": document.getElementById("nama-siswa").value, Kelas: document.getElementById("kelas-siswa").value };
             const action = editId ? "updateSiswa" : "saveSiswa";
             if (await sendToServer(action, payload)) {
                 if (editId) {
                     const idx = db.siswa.findIndex(s => s.ID === editId);
                     if (idx !== -1) db.siswa[idx] = payload;
-                } else {
-                    db.siswa.push(payload);
-                }
+                } else db.siswa.push(payload);
                 renderSiswa();
                 refreshSelectors();
                 updateStats();
@@ -652,18 +646,12 @@
             }
         });
         
+        // Render Guru (singkat)
         function renderGuru() {
             document.getElementById("table-guru").innerHTML = db.guru.map((g, i) => `
-                <tr>
-                    <td class="text-center">${i+1}</td>
-                    <td>${g.NIP}</td>
-                    <td>${g['Nama Guru']}</td>
-                    <td>${g.Mapel}</td>
-                    <td>
-                        <button class="action-btn btn-edit" onclick="editGuru('${g.ID}')"><i class="fa-solid fa-pen"></i> Edit</button>
-                        <button class="action-btn btn-delete" onclick="hapusGuru('${g.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button>
-                    </td>
-                </tr>
+                <tr><td class="text-center">${i+1}</td><td>${g.NIP}</td><td>${g['Nama Guru']}</td><td>${g.Mapel}</td>
+                <td><button class="action-btn btn-edit" onclick="editGuru('${g.ID}')"><i class="fa-solid fa-pen"></i> Edit</button>
+                <button class="action-btn btn-delete" onclick="hapusGuru('${g.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button></td></tr>
             `).join("");
         }
         
@@ -707,21 +695,13 @@
         document.getElementById("form-guru")?.addEventListener("submit", async (e) => {
             e.preventDefault();
             const editId = document.getElementById("edit-guru-id").value;
-            const payload = { 
-                ID: editId || Date.now().toString(), 
-                NIP: document.getElementById("nip-guru").value, 
-                "Nama Guru": document.getElementById("nama-guru").value, 
-                Mapel: document.getElementById("mapel-guru").value 
-            };
-            
+            const payload = { ID: editId || Date.now().toString(), NIP: document.getElementById("nip-guru").value, "Nama Guru": document.getElementById("nama-guru").value, Mapel: document.getElementById("mapel-guru").value };
             const action = editId ? "updateGuru" : "saveGuru";
             if (await sendToServer(action, payload)) {
                 if (editId) {
                     const idx = db.guru.findIndex(g => g.ID === editId);
                     if (idx !== -1) db.guru[idx] = payload;
-                } else {
-                    db.guru.push(payload);
-                }
+                } else db.guru.push(payload);
                 renderGuru();
                 refreshSelectors();
                 updateStats();
@@ -732,18 +712,12 @@
             }
         });
         
+        // Render Mapel (singkat)
         function renderMapel() {
             document.getElementById("table-mapel").innerHTML = db.mapel.map((m, i) => `
-                <tr>
-                    <td class="text-center">${i+1}</td>
-                    <td>${m['Nama Mapel']}</td>
-                    <td>${m.Semester}</td>
-                    <td>${m['Tahun Ajaran']}</td>
-                    <td>
-                        <button class="action-btn btn-edit" onclick="editMapel('${m.ID}')"><i class="fa-solid fa-pen"></i> Edit</button>
-                        <button class="action-btn btn-delete" onclick="hapusMapel('${m.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button>
-                    </td>
-                </tr>
+                <tr><td class="text-center">${i+1}</td><td>${m['Nama Mapel']}</td><td>${m.Semester}</td><td>${m['Tahun Ajaran']}</td>
+                <td><button class="action-btn btn-edit" onclick="editMapel('${m.ID}')"><i class="fa-solid fa-pen"></i> Edit</button>
+                <button class="action-btn btn-delete" onclick="hapusMapel('${m.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button></td></tr>
             `).join("");
         }
         
@@ -787,21 +761,13 @@
         document.getElementById("form-mapel")?.addEventListener("submit", async (e) => {
             e.preventDefault();
             const editId = document.getElementById("edit-mapel-id").value;
-            const payload = { 
-                ID: editId || Date.now().toString(), 
-                "Nama Mapel": document.getElementById("nama-mapel").value, 
-                Semester: document.getElementById("semester").value, 
-                "Tahun Ajaran": document.getElementById("tahun-ajaran").value 
-            };
-            
+            const payload = { ID: editId || Date.now().toString(), "Nama Mapel": document.getElementById("nama-mapel").value, Semester: document.getElementById("semester").value, "Tahun Ajaran": document.getElementById("tahun-ajaran").value };
             const action = editId ? "updateMapel" : "saveMapel";
             if (await sendToServer(action, payload)) {
                 if (editId) {
                     const idx = db.mapel.findIndex(m => m.ID === editId);
                     if (idx !== -1) db.mapel[idx] = payload;
-                } else {
-                    db.mapel.push(payload);
-                }
+                } else db.mapel.push(payload);
                 renderMapel();
                 refreshSelectors();
                 updateStats();
@@ -812,24 +778,16 @@
             }
         });
         
+        // Render Pelanggaran
         function renderPelanggaran() {
             document.getElementById("table-pelanggaran").innerHTML = db.pelanggaran.map((p, i) => {
                 let cls = "poin-sedang";
                 if (p.Poin <= 10) cls = "poin-rendah";
                 if (p.Poin >= 50) cls = "poin-tinggi";
-                return `<tr>
-                    <td class="text-center">${i+1}</td>
-                    <td>${p['Nama Siswa']}</td>
-                    <td>${p.Kelas}</td>
-                    <td>${p.Pelanggaran}</td>
-                    <td><span class="poin-badge ${cls}">${p.Poin}</span></td>
-                    <td>${p.Tanggal}</td>
-                    <td>${p.Keterangan || "-"}</td>
-                    <td>
-                        <button class="action-btn btn-edit" onclick="editPelanggaran('${p.ID}')"><i class="fa-solid fa-pen"></i></button>
-                        <button class="action-btn btn-delete" onclick="hapusPelanggaran('${p.ID}')"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>`;
+                return `<tr><td class="text-center">${i+1}</td><td>${p['Nama Siswa']}</td><td>${p.Kelas}</td><td>${p.Pelanggaran}</td>
+                <td><span class="poin-badge ${cls}">${p.Poin}</span></td><td>${p.Tanggal}</td><td>${p.Keterangan || "-"}</td>
+                <td><button class="action-btn btn-edit" onclick="editPelanggaran('${p.ID}')"><i class="fa-solid fa-pen"></i></button>
+                <button class="action-btn btn-delete" onclick="hapusPelanggaran('${p.ID}')"><i class="fa-solid fa-trash"></i></button></td></tr>`;
             }).join("");
         }
         
@@ -884,15 +842,12 @@
                 Tanggal: document.getElementById("pelanggaran-tanggal").value,
                 Keterangan: document.getElementById("pelanggaran-keterangan").value
             };
-            
             const action = editId ? "updatePelanggaran" : "savePelanggaran";
             if (await sendToServer(action, payload)) {
                 if (editId) {
                     const idx = db.pelanggaran.findIndex(p => p.ID === editId);
                     if (idx !== -1) db.pelanggaran[idx] = payload;
-                } else {
-                    db.pelanggaran.push(payload);
-                }
+                } else db.pelanggaran.push(payload);
                 renderPelanggaran();
                 updateStats();
                 document.getElementById("edit-pelanggaran-id").value = "";
@@ -902,19 +857,12 @@
             }
         });
         
+        // Render Jadwal
         function renderJadwal() {
             document.getElementById("table-jadwal").innerHTML = db.jadwal.map((j, i) => `
-                <tr>
-                    <td class="text-center">${i+1}</td>
-                    <td>${j.Hari}</td>
-                    <td>${j.Jam}</td>
-                    <td>${j.Kelas}</td>
-                    <td>${j.Mapel}</td>
-                    <td>
-                        <button class="action-btn btn-edit" onclick="editJadwal('${j.ID}')"><i class="fa-solid fa-pen"></i></button>
-                        <button class="action-btn btn-delete" onclick="hapusJadwal('${j.ID}')"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                 </tr>
+                <tr><td class="text-center">${i+1}</td><td>${j.Hari}</td><td>${j.Jam}</td><td>${j.Kelas}</td><td>${j.Mapel}</td>
+                <td><button class="action-btn btn-edit" onclick="editJadwal('${j.ID}')"><i class="fa-solid fa-pen"></i></button>
+                <button class="action-btn btn-delete" onclick="hapusJadwal('${j.ID}')"><i class="fa-solid fa-trash"></i></button> </tr>
             `).join("");
         }
         
@@ -955,22 +903,13 @@
         document.getElementById("form-jadwal")?.addEventListener("submit", async (e) => {
             e.preventDefault();
             const editId = document.getElementById("edit-jadwal-id").value;
-            const payload = { 
-                ID: editId || Date.now().toString(), 
-                Hari: document.getElementById("jadwal-hari").value, 
-                Jam: document.getElementById("jadwal-jam").value, 
-                Kelas: document.getElementById("jadwal-kelas").value, 
-                Mapel: document.getElementById("jadwal-mapel").value 
-            };
-            
+            const payload = { ID: editId || Date.now().toString(), Hari: document.getElementById("jadwal-hari").value, Jam: document.getElementById("jadwal-jam").value, Kelas: document.getElementById("jadwal-kelas").value, Mapel: document.getElementById("jadwal-mapel").value };
             const action = editId ? "updateJadwal" : "saveJadwal";
             if (await sendToServer(action, payload)) {
                 if (editId) {
                     const idx = db.jadwal.findIndex(j => j.ID === editId);
                     if (idx !== -1) db.jadwal[idx] = payload;
-                } else {
-                    db.jadwal.push(payload);
-                }
+                } else db.jadwal.push(payload);
                 renderJadwal();
                 document.getElementById("edit-jadwal-id").value = "";
                 document.getElementById("form-jadwal").querySelector("button").innerHTML = "Tambah";
@@ -979,23 +918,14 @@
             }
         });
         
+        // Render Agenda (singkat)
         function renderAgenda() {
             document.getElementById("table-agenda").innerHTML = db.agenda.map((a, i) => `
-                <tr>
-                    <td class="text-center">${i+1}</td>
-                    <td>${a.Tanggal}</td>
-                    <td>${a.Jam}</td>
-                    <td>${a.Kelas}</td>
-                    <td>${a.Mapel}</td>
-                    <td>${a.Materi}</td>
-                    <td><span class="px-2 py-1 rounded-full text-xs ${a.Status === 'Terlaksana' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}">${a.Status}</span></td>
-                    <td>${a['Absen Siswa']}</td>
-                    <td>${a.Ket || '-'}</td>
-                    <td>
-                        <button class="action-btn btn-edit" onclick="editAgenda('${a.ID}')"><i class="fa-solid fa-pen"></i></button>
-                        <button class="action-btn btn-delete" onclick="hapusAgenda('${a.ID}')"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                 </tr>
+                <tr><td class="text-center">${i+1}</td><td>${a.Tanggal}</td><td>${a.Jam}</td><td>${a.Kelas}</td><td>${a.Mapel}</td>
+                <td>${a.Materi}</td><td><span class="px-2 py-1 rounded-full text-xs ${a.Status === 'Terlaksana' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}">${a.Status}</span></td>
+                <td>${a['Absen Siswa']}</td><td>${a.Ket || '-'}</td>
+                <td><button class="action-btn btn-edit" onclick="editAgenda('${a.ID}')"><i class="fa-solid fa-pen"></i></button>
+                <button class="action-btn btn-delete" onclick="hapusAgenda('${a.ID}')"><i class="fa-solid fa-trash"></i></button></td>
             `).join("");
         }
         
@@ -1052,15 +982,12 @@
                 Ket: document.getElementById("agenda-keterangan").value,
                 "Nama Guru": db.config.Nama_Guru || "Guru"
             };
-            
             const action = editId ? "updateAgenda" : "saveAgenda";
             if (await sendToServer(action, payload)) {
                 if (editId) {
                     const idx = db.agenda.findIndex(a => a.ID === editId);
                     if (idx !== -1) db.agenda[idx] = payload;
-                } else {
-                    db.agenda.push(payload);
-                }
+                } else db.agenda.push(payload);
                 renderAgenda();
                 document.getElementById("edit-agenda-id").value = "";
                 document.getElementById("form-agenda").querySelector("button").innerHTML = "Simpan Jurnal";
@@ -1070,21 +997,13 @@
             }
         });
         
+        // Render Bimbingan
         function renderBimbingan() {
             document.getElementById("table-bimbingan").innerHTML = db.bimbingan.map((b, i) => `
-                <tr>
-                    <td class="text-center">${i+1}</td>
-                    <td>${b.Tanggal}</td>
-                    <td>${b['Nama Siswa']}</td>
-                    <td>${b.Kelas}</td>
-                    <td>${b.Jenis}</td>
-                    <td>${b.Kasus}</td>
-                    <td>${b['Tindak Lanjut']}</td>
-                    <td>
-                        <button class="action-btn btn-edit" onclick="editBimbingan('${b.ID}')"><i class="fa-solid fa-pen"></i></button>
-                        <button class="action-btn btn-delete" onclick="hapusBimbingan('${b.ID}')"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                 </tr>
+                <tr><td class="text-center">${i+1}</td><td>${b.Tanggal}</td><td>${b['Nama Siswa']}</td><td>${b.Kelas}</td><td>${b.Jenis}</td>
+                <td>${b.Kasus}</td><td>${b['Tindak Lanjut']}</td>
+                <td><button class="action-btn btn-edit" onclick="editBimbingan('${b.ID}')"><i class="fa-solid fa-pen"></i></button>
+                <button class="action-btn btn-delete" onclick="hapusBimbingan('${b.ID}')"><i class="fa-solid fa-trash"></i></button></td>
             `).join("");
         }
         
@@ -1115,11 +1034,7 @@
         
         document.getElementById("form-daftar-siswa")?.addEventListener("submit", async (e) => {
             e.preventDefault();
-            const payload = { 
-                ID: Date.now().toString(), 
-                "Nama Siswa": document.getElementById("daftar-nama").value, 
-                Kelas: document.getElementById("daftar-kelas").value 
-            };
+            const payload = { ID: Date.now().toString(), "Nama Siswa": document.getElementById("daftar-nama").value, Kelas: document.getElementById("daftar-kelas").value };
             if (await sendToServer("saveSiswaBimbingan", payload)) {
                 db.siswaBimbingan.push(payload);
                 refreshSelectors();
@@ -1158,15 +1073,12 @@
                 "Tindak Lanjut": document.getElementById("bimbingan-solusi").value,
                 "Guru Wali": db.config.Nama_Guru || "Guru"
             };
-            
             const action = editId ? "updateBimbingan" : "saveBimbingan";
             if (await sendToServer(action, payload)) {
                 if (editId) {
                     const idx = db.bimbingan.findIndex(b => b.ID === editId);
                     if (idx !== -1) db.bimbingan[idx] = payload;
-                } else {
-                    db.bimbingan.push(payload);
-                }
+                } else db.bimbingan.push(payload);
                 renderBimbingan();
                 document.getElementById("edit-bimbingan-id").value = "";
                 document.getElementById("form-bimbingan").querySelector("button").innerHTML = "Simpan Catatan";
@@ -1415,12 +1327,6 @@
         }
         
         async function cetakKartu() {
-            const jenis = document.getElementById("kartu-jenis").value;
-            const selected = document.getElementById("kartu-data").value;
-            if (!selected) { 
-                Swal.fire("Peringatan", "Pilih data!", "warning"); 
-                return; 
-            }
             Swal.fire("Info", "Fitur cetak PDF sedang dalam pengembangan", "info");
         }
         
@@ -1475,7 +1381,7 @@
             const siswaList = db.siswa.filter(s => s.Kelas === kelas);
             const nilaiData = db.nilai.filter(n => n.Kelas === kelas && n.Mapel === mapel);
             const jenisList = [...new Set(nilaiData.map(n => n.Jenis))];
-            let html = `<div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th>No</th><th>Nama</th>${jenisList.map(j => `<th>${j}</th>`).join("")}<th>Rata</th> </tr></thead><tbody>`;
+            let html = `<div class="overflow-x-auto"><table class="admin-table"><thead><tr><th>No</th><th>Nama</th>${jenisList.map(j => `<th>${j}</th>`).join("")}<th>Rata</th></tr></thead><tbody>`;
             siswaList.forEach((s, i) => {
                 const nilaiSiswa = nilaiData.filter(n => String(n.ID_Siswa) === String(s.ID) || String(n.ID_Siswa) === String(s.NISN));
                 let total = 0, count = 0;
@@ -1496,7 +1402,7 @@
             const kelas = document.getElementById("laporan-pelanggaran-kelas").value;
             let filtered = db.pelanggaran;
             if (kelas) filtered = filtered.filter(p => p.Kelas === kelas);
-            let html = `<div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th>No</th><th>Siswa</th><th>Kelas</th><th>Pelanggaran</th><th>Poin</th><th>Tanggal</th> </tr></thead><tbody>`;
+            let html = `<div class="overflow-x-auto"><table class="admin-table"><thead>  <th>No</th><th>Siswa</th><th>Kelas</th><th>Pelanggaran</th><th>Poin</th><th>Tanggal</th>  </thead><tbody>`;
             filtered.forEach((p, i) => {
                 html += `<tr><td class="text-center">${i+1}</td><td>${p['Nama Siswa']}</td><td>${p.Kelas}</td><td>${p.Pelanggaran}</td><td class="text-center">${p.Poin}</td><td>${p.Tanggal}</td></tr>`;
             });
