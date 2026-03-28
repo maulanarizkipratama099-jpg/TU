@@ -56,11 +56,11 @@
         .tab-btn { transition: all 0.2s; cursor: pointer; padding: 8px 16px; border-radius: 8px; }
         .tab-btn.active { background: #1e3a8a !important; color: white !important; }
         .dark .tab-btn.active { background: #3b82f6 !important; }
-        #video-container { position: relative; width: 100%; max-width: 500px; margin: 0 auto; border-radius: 16px; overflow: hidden; background: #000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.3s; }
-        #video-container.fullscreen { position: fixed; top: 0; left: 0; right: 0; bottom: 0; max-width: 100%; width: 100%; height: 100%; z-index: 9999; border-radius: 0; }
-        #video-container.fullscreen #video { height: 100%; object-fit: cover; }
-        #video { width: 100%; height: auto; display: block; }
-        #canvas { display: none; }
+        .video-container { position: relative; width: 100%; max-width: 500px; margin: 0 auto; border-radius: 16px; overflow: hidden; background: #000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.3s; }
+        .video-container.fullscreen { position: fixed; top: 0; left: 0; right: 0; bottom: 0; max-width: 100%; width: 100%; height: 100%; z-index: 9999; border-radius: 0; }
+        .video-container.fullscreen video { height: 100%; object-fit: cover; }
+        video { width: 100%; height: auto; display: block; }
+        canvas { display: none; }
         .fullscreen-btn { position: absolute; bottom: 20px; right: 20px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 24px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
         .fullscreen-btn:hover { background: rgba(0,0,0,0.9); transform: scale(1.05); }
         @media print { body * { visibility: hidden; } #print-area, #print-area * { visibility: visible; } #print-area { position: absolute; left: 0; top: 0; width: 100%; } .no-print { display: none !important; } }
@@ -201,7 +201,7 @@
                         </form>
                         <div class="overflow-x-auto">
                             <table class="admin-table">
-                                <thead> <tr><th width="5%">No</th><th>NISN</th><th>Nama Lengkap</th><th>Kelas</th><th width="15%">Aksi</th></tr> </thead>
+                                <thead><tr><th width="5%">No</th><th>NISN</th><th>Nama Lengkap</th><th>Kelas</th><th width="15%">Aksi</th></tr></thead>
                                 <tbody id="table-siswa"></tbody>
                             </table>
                         </div>
@@ -228,7 +228,7 @@
                         </form>
                         <div class="overflow-x-auto">
                             <table class="admin-table">
-                                <thead> <tr><th width="5%">No</th><th>NIP</th><th>Nama Lengkap</th><th>Mata Pelajaran</th><th width="15%">Aksi</th></tr> </thead>
+                                <thead><tr><th width="5%">No</th><th>NIP</th><th>Nama Lengkap</th><th>Mata Pelajaran</th><th width="15%">Aksi</th></tr></thead>
                                 <tbody id="table-guru"></tbody>
                             </table>
                         </div>
@@ -246,7 +246,7 @@
                             <input type="text" id="tahun-ajaran" placeholder="Tahun Ajaran" class="px-3 py-2 border rounded-lg dark:bg-gray-800" required>
                             <button type="submit" class="bg-school-main text-white px-4 py-2 rounded-lg font-semibold">Tambah Mapel</button>
                         </form>
-                        <div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th width="5%">No</th><th>Mata Pelajaran</th><th>Semester</th><th>Tahun Ajaran</th><th width="15%">Aksi</th></tr> </thead><tbody id="table-mapel"></tbody></table></div>
+                        <div class="overflow-x-auto"><table class="admin-table"><thead><tr><th width="5%">No</th><th>Mata Pelajaran</th><th>Semester</th><th>Tahun Ajaran</th><th width="15%">Aksi</th></tr></thead><tbody id="table-mapel"></tbody></table></div>
                     </div>
                 </div>
                 
@@ -263,7 +263,7 @@
                             <input type="text" id="pelanggaran-keterangan" placeholder="Keterangan" class="px-3 py-2 border rounded-lg dark:bg-gray-800">
                             <button type="submit" class="bg-school-main text-white px-4 py-2 rounded-lg font-semibold md:col-span-5">Tambah Pelanggaran</button>
                         </form>
-                        <div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th>No</th><th>Siswa</th><th>Kelas</th><th>Pelanggaran</th><th>Poin</th><th>Tanggal</th><th>Keterangan</th><th width="12%">Aksi</th></tr> </thead><tbody id="table-pelanggaran"></tbody></table></div>
+                        <div class="overflow-x-auto"><table class="admin-table"><thead><tr><th>No</th><th>Siswa</th><th>Kelas</th><th>Pelanggaran</th><th>Poin</th><th>Tanggal</th><th>Keterangan</th><th width="12%">Aksi</th></tr></thead><tbody id="table-pelanggaran"></tbody></table></div>
                     </div>
                 </div>
                 
@@ -279,22 +279,20 @@
                             <select id="jadwal-mapel" class="px-3 py-2 border rounded-lg dark:bg-gray-800"><option>Pilih Mapel</option></select>
                             <button type="submit" class="bg-school-main text-white px-4 py-2 rounded-lg font-semibold">Tambah</button>
                         </form>
-                        <div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th>Hari</th><th>Jam</th><th>Kelas</th><th>Mapel</th><th width="12%">Aksi</th></tr> </thead><tbody id="table-jadwal"></tbody></table></div>
+                        <div class="overflow-x-auto"><table class="admin-table"><thead><tr><th>Hari</th><th>Jam</th><th>Kelas</th><th>Mapel</th><th width="12%">Aksi</th></tr></thead><tbody id="table-jadwal"></tbody></table></div>
                     </div>
                 </div>
                 
-                <!-- Absensi Page - Dengan Tab Siswa dan Guru -->
+                <!-- Absensi Page -->
                 <div class="page-container" id="page-absensi">
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
                         <h3 class="text-xl font-bold mb-4">Input Absensi Harian</h3>
-                        
-                        <!-- Tab untuk memilih jenis absensi -->
                         <div class="absensi-tab">
                             <button class="absensi-tab-btn active" onclick="switchAbsensiJenis('siswa')"><i class="fa-solid fa-users mr-2"></i> Absensi Siswa</button>
                             <button class="absensi-tab-btn" onclick="switchAbsensiJenis('guru')"><i class="fa-solid fa-chalkboard-user mr-2"></i> Absensi Guru</button>
                         </div>
                         
-                        <!-- Form Absensi Siswa -->
+                        <!-- Absensi Siswa Section -->
                         <div id="absensi-siswa-section">
                             <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
                                 <div class="flex bg-gray-100 dark:bg-gray-700 p-1 rounded-lg">
@@ -309,7 +307,7 @@
                             </div>
                             <div id="absen-siswa-manual">
                                 <div class="flex justify-end mb-3"><button class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm" onclick="setHadirSemuaSiswa()"><i class="fa-solid fa-check-double mr-2"></i> Hadir Semua</button></div>
-                                <div class="overflow-x-auto mb-6"><table class="admin-table"><thead> <tr><th class="text-center">No</th><th>Nama Siswa</th><th class="text-center">Hadir</th><th class="text-center">Izin</th><th class="text-center">Sakit</th><th class="text-center">Alpa</th>  </thead><tbody id="table-absensi-siswa"> <tr><td colspan="6" class="text-center py-8">Pilih Tanggal, Kelas, dan Mapel</td></tr> </tbody></table></div>
+                                <div class="overflow-x-auto mb-6"><table class="admin-table"><thead> <tr><th class="text-center">No</th><th>Nama Siswa</th><th class="text-center">Hadir</th><th class="text-center">Izin</th><th class="text-center">Sakit</th><th class="text-center">Alpa</th></tr></thead><tbody id="table-absensi-siswa"><tr><td colspan="6" class="text-center py-8">Pilih Tanggal, Kelas, dan Mapel</td></tr></tbody></table></div>
                                 <div class="flex justify-end"><button class="bg-school-main text-white px-8 py-3 rounded-xl font-bold" onclick="saveAbsensiSiswa()"><i class="fa-solid fa-save mr-2"></i> Simpan Absensi Siswa</button></div>
                             </div>
                             <div id="absen-siswa-scan" class="hidden">
@@ -323,7 +321,7 @@
                             </div>
                         </div>
                         
-                        <!-- Form Absensi Guru -->
+                        <!-- Absensi Guru Section -->
                         <div id="absensi-guru-section" class="hidden">
                             <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
                                 <div class="flex bg-gray-100 dark:bg-gray-700 p-1 rounded-lg">
@@ -337,7 +335,7 @@
                             </div>
                             <div id="absen-guru-manual">
                                 <div class="flex justify-end mb-3"><button class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm" onclick="setHadirSemuaGuru()"><i class="fa-solid fa-check-double mr-2"></i> Hadir Semua</button></div>
-                                <div class="overflow-x-auto mb-6"><table class="admin-table"><thead> <tr><th class="text-center">No</th><th>NIP</th><th>Nama Guru</th><th>Mapel</th><th class="text-center">Hadir</th><th class="text-center">Izin</th><th class="text-center">Sakit</th><th class="text-center">Alpa</th>  </thead><tbody id="table-absensi-guru"> <tr><td colspan="8" class="text-center py-8">Pilih Tanggal</td></tr> </tbody></table></div>
+                                <div class="overflow-x-auto mb-6"><table class="admin-table"><thead> <tr><th class="text-center">No</th><th>NIP</th><th>Nama Guru</th><th>Mapel</th><th class="text-center">Hadir</th><th class="text-center">Izin</th><th class="text-center">Sakit</th><th class="text-center">Alpa</th></tr></thead><tbody id="table-absensi-guru"><tr><td colspan="8" class="text-center py-8">Pilih Tanggal</td></tr></tbody></table></div>
                                 <div class="flex justify-end"><button class="bg-school-main text-white px-8 py-3 rounded-xl font-bold" onclick="saveAbsensiGuru()"><i class="fa-solid fa-save mr-2"></i> Simpan Absensi Guru</button></div>
                             </div>
                             <div id="absen-guru-scan" class="hidden">
@@ -363,7 +361,7 @@
                             <input type="text" id="penilaian-jenis" placeholder="Jenis (UH 1, UTS, UAS)" class="px-3 py-2 border rounded-lg dark:bg-gray-800">
                             <button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold" onclick="loadPenilaianList()"><i class="fa-solid fa-search mr-2"></i> Muat Data</button>
                         </div>
-                        <div class="overflow-x-auto mb-6"><table class="admin-table"><thead> <tr><th class="text-center">No</th><th>Nama Siswa</th><th class="text-center">Nilai</th>  </thead><tbody id="table-penilaian"> <tr><td colspan="3" class="text-center py-8">Pilih Kelas, Mapel, dan Jenis Penilaian</td></tr> </tbody></table></div>
+                        <div class="overflow-x-auto mb-6"><table class="admin-table"><thead> <tr><th class="text-center">No</th><th>Nama Siswa</th><th class="text-center">Nilai</th></tr></thead><tbody id="table-penilaian"><tr><td colspan="3" class="text-center py-8">Pilih Kelas, Mapel, dan Jenis Penilaian</td></tr></tbody></table></div>
                         <div class="flex justify-end"><button class="bg-school-main text-white px-8 py-3 rounded-xl font-bold" onclick="savePenilaian()"><i class="fa-solid fa-save mr-2"></i> Simpan Nilai</button></div>
                     </div>
                 </div>
@@ -384,7 +382,7 @@
                             <input type="text" id="agenda-keterangan" placeholder="Keterangan" class="px-3 py-2 border rounded-lg dark:bg-gray-800 md:col-span-2">
                             <button type="submit" class="bg-school-main text-white px-4 py-2 rounded-lg font-semibold md:col-span-2">Simpan Jurnal</button>
                         </form>
-                        <div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th>Tanggal</th><th>Jam</th><th>Kelas</th><th>Mapel</th><th>Materi</th><th>Status</th><th>Absen</th><th>Keterangan</th><th width="10%">Aksi</th>  </thead><tbody id="table-agenda"></tbody> </table></div>
+                        <div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th>Tanggal</th><th>Jam</th><th>Kelas</th><th>Mapel</th><th>Materi</th><th>Status</th><th>Absen</th><th>Keterangan</th><th width="10%">Aksi</th></tr></thead><tbody id="table-agenda"></tbody></table></div>
                     </div>
                 </div>
                 
@@ -412,7 +410,7 @@
                                 <input type="text" id="bimbingan-solusi" placeholder="Solusi / Tindak Lanjut" class="md:col-span-2 px-3 py-2 border rounded-lg dark:bg-gray-800" required>
                                 <button type="submit" class="bg-school-main text-white px-4 py-2 rounded-lg font-semibold md:col-span-2">Simpan Catatan</button>
                             </form>
-                            <div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th>Tanggal</th><th>Siswa</th><th>Kelas</th><th>Jenis</th><th>Masalah</th><th>Solusi</th><th width="10%">Aksi</th>  </thead><tbody id="table-bimbingan"></tbody> </table></div>
+                            <div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th>Tanggal</th><th>Siswa</th><th>Kelas</th><th>Jenis</th><th>Masalah</th><th>Solusi</th><th width="10%">Aksi</th></tr></thead><tbody id="table-bimbingan"></tbody></table></div>
                         </div>
                     </div>
                 </div>
@@ -449,7 +447,7 @@
                                 <select id="laporan-absensi-siswa-bulan" class="px-3 py-2 border rounded-lg dark:bg-gray-800"><option value="ALL">Semua Bulan</option><option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option><option value="04">April</option><option value="05">Mei</option><option value="06">Juni</option><option value="07">Juli</option><option value="08">Agustus</option><option value="09">September</option><option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option></select>
                                 <div class="flex gap-2"><button class="flex-1 bg-blue-600 text-white px-3 py-2 rounded-lg" onclick="tampilkanLaporanAbsensiSiswa('rekap')">Rekap</button><button class="flex-1 bg-gray-600 text-white px-3 py-2 rounded-lg" onclick="tampilkanLaporanAbsensiSiswa('detail')">Detail</button></div>
                             </div>
-                            <div id="area-absensi-siswa" class="hidden"><div class="overflow-x-auto mb-4"><table class="admin-table" id="tabel-absensi-siswa"> </table></div><button class="w-full bg-red-600 text-white py-2 rounded-lg font-bold" onclick="cetakLaporanAbsensi('siswa')"><i class="fa-solid fa-file-pdf mr-2"></i> Cetak PDF Absensi Siswa</button></div>
+                            <div id="area-absensi-siswa" class="hidden"><div class="overflow-x-auto mb-4"><table class="admin-table" id="tabel-absensi-siswa-report"></table></div><button class="w-full bg-red-600 text-white py-2 rounded-lg font-bold" onclick="cetakLaporanAbsensi('siswa')"><i class="fa-solid fa-file-pdf mr-2"></i> Cetak PDF Absensi Siswa</button></div>
                         </div>
                         
                         <!-- Laporan Absensi Guru -->
@@ -460,7 +458,7 @@
                                 <select id="laporan-absensi-guru-bulan" class="px-3 py-2 border rounded-lg dark:bg-gray-800"><option value="ALL">Semua Bulan</option><option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option><option value="04">April</option><option value="05">Mei</option><option value="06">Juni</option><option value="07">Juli</option><option value="08">Agustus</option><option value="09">September</option><option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option></select>
                                 <div class="flex gap-2"><button class="flex-1 bg-blue-600 text-white px-3 py-2 rounded-lg" onclick="tampilkanLaporanAbsensiGuru('rekap')">Rekap</button><button class="flex-1 bg-gray-600 text-white px-3 py-2 rounded-lg" onclick="tampilkanLaporanAbsensiGuru('detail')">Detail</button></div>
                             </div>
-                            <div id="area-absensi-guru" class="hidden"><div class="overflow-x-auto mb-4"><table class="admin-table" id="tabel-absensi-guru"> </table></div><button class="w-full bg-red-600 text-white py-2 rounded-lg font-bold" onclick="cetakLaporanAbsensi('guru')"><i class="fa-solid fa-file-pdf mr-2"></i> Cetak PDF Absensi Guru</button></div>
+                            <div id="area-absensi-guru" class="hidden"><div class="overflow-x-auto mb-4"><table class="admin-table" id="tabel-absensi-guru-report"></table></div><button class="w-full bg-red-600 text-white py-2 rounded-lg font-bold" onclick="cetakLaporanAbsensi('guru')"><i class="fa-solid fa-file-pdf mr-2"></i> Cetak PDF Absensi Guru</button></div>
                         </div>
                         
                         <!-- Laporan Nilai -->
@@ -471,7 +469,7 @@
                                 <select id="laporan-nilai-mapel" class="px-3 py-2 border rounded-lg dark:bg-gray-800"><option>Pilih Mapel</option></select>
                                 <div class="flex gap-2"><button class="flex-1 bg-blue-600 text-white px-3 py-2 rounded-lg" onclick="tampilkanLaporanNilai('leger')">Leger</button><button class="flex-1 bg-gray-600 text-white px-3 py-2 rounded-lg" onclick="tampilkanLaporanNilai('detail')">Detail</button></div>
                             </div>
-                            <div id="area-nilai" class="hidden"><div class="overflow-x-auto mb-4"><table class="admin-table" id="tabel-nilai"> </table></div><button class="w-full bg-red-600 text-white py-2 rounded-lg font-bold" onclick="cetakLaporanNilai()"><i class="fa-solid fa-file-pdf mr-2"></i> Cetak PDF Nilai</button></div>
+                            <div id="area-nilai" class="hidden"><div class="overflow-x-auto mb-4"><table class="admin-table" id="tabel-nilai-report"></table></div><button class="w-full bg-red-600 text-white py-2 rounded-lg font-bold" onclick="cetakLaporanNilai()"><i class="fa-solid fa-file-pdf mr-2"></i> Cetak PDF Nilai</button></div>
                         </div>
                         
                         <!-- Laporan Pelanggaran -->
@@ -481,7 +479,7 @@
                                 <select id="laporan-pelanggaran-kelas" class="px-3 py-2 border rounded-lg dark:bg-gray-800"><option>Pilih Kelas</option></select>
                                 <div class="flex gap-2"><button class="flex-1 bg-blue-600 text-white px-3 py-2 rounded-lg" onclick="tampilkanLaporanPelanggaran()">Tampilkan</button><button class="flex-1 bg-red-600 text-white px-3 py-2 rounded-lg" onclick="cetakLaporanPelanggaran()"><i class="fa-solid fa-file-pdf mr-2"></i> Cetak PDF</button></div>
                             </div>
-                            <div id="area-pelanggaran" class="hidden"><div class="overflow-x-auto mb-4"><table class="admin-table" id="tabel-pelanggaran"> </table></div></div>
+                            <div id="area-pelanggaran" class="hidden"><div class="overflow-x-auto mb-4"><table class="admin-table" id="tabel-pelanggaran-report"></table></div></div>
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -513,20 +511,19 @@
     
     <script>
         // ============================================
-        // KONFIGURASI
+        // KONFIGURASI - GANTI DENGAN URL APPS SCRIPT ANDA
         // ============================================
-        let GAS_URL = "https://script.google.com/macros/s/AKfycbz87OutfdI4LwUfy2fDBAfNqJrSWFMULRjrrAxwfJSyNcP5AeGhNmME3vJuwj96l8tP/exec";
+        let GAS_URL = "https://script.google.com/macros/s/AKfycbwN4NuuZJIG9l_CB1cAmvgx2scbcWUdySZn3aOC9Kc14VyBdELoCnp9q5DEgmzlmsk0/exec"; // ISI DENGAN URL APPS SCRIPT ANDA
         
         // Database
         let db = {
-            siswa: [], guru: [], mapel: [], jadwal: [], absensiSiswa: [], absensiGuru: [], 
+            siswa: [], guru: [], mapel: [], jadwal: [], absensiSiswa: [], absensiGuru: [],
             nilai: [], agenda: [], bimbingan: [], siswaBimbingan: [], pelanggaran: [], config: {}
         };
         
         let chartKehadiranSiswa = null, chartKehadiranGuru = null, chartNilai = null;
         let videoStreamSiswa = null, videoStreamGuru = null, scanningSiswa = false, scanningGuru = false;
         let cachedLogo = null;
-        let lastReportData = { kelas: "", mapel: "", jenis: "siswa" };
         
         // ============================================
         // UTILITY FUNCTIONS
@@ -547,25 +544,47 @@
                 el.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i><span>Sync...</span>';
                 el.className = "text-xs font-bold px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300";
             } else {
-                el.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1"></i><span>Error</span>';
-                el.className = "text-xs font-bold px-3 py-1 rounded-full bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300";
+                el.innerHTML = '<i class="fa-solid fa-database mr-1"></i><span>Lokal</span>';
+                el.className = "text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300";
             }
         }
         
         function retrySync() { syncFromCloud(); }
         
         async function syncFromCloud() {
-            if (!GAS_URL) { showLoading(false); updateSyncStatus("error"); return; }
-            showLoading(true, "Menyinkronkan data..."); updateSyncStatus("loading");
+            if (!GAS_URL) {
+                setDefaultData();
+                showLoading(false);
+                updateSyncStatus("error");
+                Swal.fire("Info", "URL Apps Script belum diatur. Menggunakan data lokal.", "info");
+                return;
+            }
+            
+            showLoading(true, "Menyinkronkan data...");
+            updateSyncStatus("loading");
+            
             try {
-                const response = await fetch(`${GAS_URL}?action=all`);
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 15000);
+                
+                const response = await fetch(`${GAS_URL}?action=all`, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
                 const result = await response.json();
+                
                 if (result.status === "success") {
                     const data = result.data;
                     db.siswa = data.data_siswa || [];
                     db.guru = data.data_guru || [];
                     db.mapel = data.mapel || [];
-                    db.jadwal = data.jadwal || [];
+                    db.jadwal = (data.jadwal || []).filter(j => j && typeof j.Hari === "string");
                     db.absensiSiswa = data.log_absensi_siswa || [];
                     db.absensiGuru = data.log_absensi_guru || [];
                     db.nilai = data.data_nilai || [];
@@ -573,25 +592,72 @@
                     db.bimbingan = data.bimbingan_wali || [];
                     db.siswaBimbingan = data.siswa_bimbingan || [];
                     db.pelanggaran = data.pelanggaran || [];
+                    
                     if (data.config) db.config = data.config;
                     else if (data.pengaturan) data.pengaturan.forEach(row => { db.config[row.Key] = row.Value; });
+                    
+                    if (Object.keys(db.config).length === 0) setDefaultConfig();
                     
                     applyConfigToForm();
                     refreshAllSelectors();
                     refreshAllTables();
                     updateDashboardStats();
+                    
                     showLoading(false);
                     updateSyncStatus("success");
-                } else throw new Error(result.message);
+                    Swal.fire("Berhasil", "Data berhasil disinkronkan", "success");
+                } else {
+                    throw new Error(result.message);
+                }
             } catch (error) {
-                console.error(error);
+                console.error("Sync error:", error);
+                setDefaultData();
                 showLoading(false);
                 updateSyncStatus("error");
-                Swal.fire("Error", "Gagal terhubung ke server. Pastikan URL Apps Script benar dan sudah di-deploy.", "error");
+                Swal.fire("Mode Offline", "Menggunakan data lokal. Koneksi ke server gagal.", "warning");
             }
         }
         
-        async function sendToServer(action, payload) {
+        function setDefaultConfig() {
+            db.config = {
+                Nama_Sekolah: "SEKOLAH ANDA",
+                Nama_Guru: "Guru",
+                Nama_Kepsek: "Kepala Sekolah",
+                Alamat_Sekolah: "Jl. Pendidikan No. 1",
+                Tempat_Tanda_Tangan: "Kota",
+                Pemerintah: "PEMERINTAH KOTA"
+            };
+        }
+        
+        function setDefaultData() {
+            if (db.siswa.length === 0) {
+                db.siswa = [
+                    { ID: "1", NISN: "1234567890", "Nama Siswa": "Ahmad Fulan", Kelas: "7A" },
+                    { ID: "2", NISN: "1234567891", "Nama Siswa": "Budi Santoso", Kelas: "7A" },
+                    { ID: "3", NISN: "1234567892", "Nama Siswa": "Citra Dewi", Kelas: "7B" }
+                ];
+            }
+            if (db.guru.length === 0) {
+                db.guru = [
+                    { ID: "1", NIP: "198001012015011001", "Nama Guru": "Budi Santoso, S.Pd", Mapel: "Matematika" },
+                    { ID: "2", NIP: "198501012015011002", "Nama Guru": "Siti Aminah, M.Pd", Mapel: "Bahasa Indonesia" }
+                ];
+            }
+            if (db.mapel.length === 0) {
+                db.mapel = [
+                    { ID: "1", "Nama Mapel": "Matematika", Semester: "Ganjil", "Tahun Ajaran": "2025/2026" },
+                    { ID: "2", "Nama Mapel": "Bahasa Indonesia", Semester: "Ganjil", "Tahun Ajaran": "2025/2026" }
+                ];
+            }
+            if (Object.keys(db.config).length === 0) setDefaultConfig();
+        }
+        
+        async function sendToServer(action, payload, showToast = true) {
+            if (!GAS_URL) {
+                if (showToast) Swal.fire("Mode Offline", "Data disimpan secara lokal", "info");
+                return true;
+            }
+            
             updateSyncStatus("loading");
             try {
                 const response = await fetch(GAS_URL, {
@@ -602,17 +668,567 @@
                 const result = await response.json();
                 if (result.status === "success") {
                     updateSyncStatus("success");
+                    if (showToast) Swal.fire({ icon: "success", title: "Berhasil", text: result.message, toast: true, timer: 2000 });
                     return true;
                 } else throw new Error(result.message);
             } catch (error) {
                 updateSyncStatus("error");
-                Swal.fire("Error", error.message, "error");
+                if (showToast) Swal.fire("Gagal", error.message, "error");
                 return false;
             }
         }
         
         // ============================================
-        // SWITCH FUNCTIONS
+        // CRUD FUNCTIONS
+        // ============================================
+        
+        function renderSiswa() {
+            const tbody = document.getElementById("table-siswa");
+            tbody.innerHTML = db.siswa.map((s, i) => `
+                <tr>
+                    <td class="text-center">${i+1}</td>
+                    <td>${s.NISN || "-"}</td>
+                    <td class="font-medium">${s['Nama Siswa'] || s.Nama || "-"}</td>
+                    <td>${s.Kelas || "-"}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editSiswa('${s.ID}')"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button class="action-btn btn-delete" onclick="hapusSiswa('${s.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button>
+                    </td>
+                </tr>
+            `).join("");
+        }
+        
+        function editSiswa(id) {
+            const siswa = db.siswa.find(s => s.ID === id);
+            if (siswa) {
+                document.getElementById("edit-siswa-id").value = siswa.ID;
+                document.getElementById("nisn").value = siswa.NISN;
+                document.getElementById("nama-siswa").value = siswa['Nama Siswa'] || siswa.Nama;
+                document.getElementById("kelas-siswa").value = siswa.Kelas;
+                document.getElementById("form-siswa").querySelector("button").innerHTML = '<i class="fa-solid fa-save mr-2"></i> Update Siswa';
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        }
+        
+        async function hapusSiswa(id) {
+            const result = await Swal.fire({ title: "Yakin hapus?", icon: "warning", showCancelButton: true });
+            if (result.isConfirmed && await sendToServer("deleteSiswa", { id })) {
+                db.siswa = db.siswa.filter(s => s.ID !== id);
+                renderSiswa();
+                refreshAllSelectors();
+                updateDashboardStats();
+                Swal.fire("Terhapus!", "", "success");
+            }
+        }
+        
+        async function hapusSemuaSiswa() {
+            const result = await Swal.fire({ title: "Hapus Semua Siswa?", icon: "warning", showCancelButton: true });
+            if (result.isConfirmed && await sendToServer("deleteAllSiswa", {})) {
+                db.siswa = [];
+                renderSiswa();
+                refreshAllSelectors();
+                updateDashboardStats();
+                Swal.fire("Terhapus!", "", "success");
+            }
+        }
+        
+        document.getElementById("form-siswa")?.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const editId = document.getElementById("edit-siswa-id").value;
+            const payload = { ID: editId || Date.now().toString(), NISN: document.getElementById("nisn").value, "Nama Siswa": document.getElementById("nama-siswa").value, Kelas: document.getElementById("kelas-siswa").value };
+            if (await sendToServer(editId ? "updateSiswa" : "saveSiswa", payload)) {
+                if (editId) {
+                    const idx = db.siswa.findIndex(s => s.ID === editId);
+                    if (idx !== -1) db.siswa[idx] = payload;
+                } else db.siswa.push(payload);
+                renderSiswa();
+                refreshAllSelectors();
+                updateDashboardStats();
+                document.getElementById("edit-siswa-id").value = "";
+                document.getElementById("form-siswa").querySelector("button").innerHTML = "Tambah Siswa";
+                e.target.reset();
+                Swal.fire("Berhasil", editId ? "Siswa diperbarui" : "Siswa ditambahkan", "success");
+            }
+        });
+        
+        function renderGuru() {
+            const tbody = document.getElementById("table-guru");
+            tbody.innerHTML = db.guru.map((g, i) => `
+                <tr>
+                    <td class="text-center">${i+1}</td>
+                    <td>${g.NIP || "-"}</td>
+                    <td class="font-medium">${g['Nama Guru'] || g.Nama || "-"}</td>
+                    <td>${g.Mapel || "-"}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editGuru('${g.ID}')"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button class="action-btn btn-delete" onclick="hapusGuru('${g.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button>
+                    </td>
+                </tr>
+            `).join("");
+        }
+        
+        function editGuru(id) {
+            const guru = db.guru.find(g => g.ID === id);
+            if (guru) {
+                document.getElementById("edit-guru-id").value = guru.ID;
+                document.getElementById("nip-guru").value = guru.NIP;
+                document.getElementById("nama-guru").value = guru['Nama Guru'] || guru.Nama;
+                document.getElementById("mapel-guru").value = guru.Mapel;
+                document.getElementById("form-guru").querySelector("button").innerHTML = '<i class="fa-solid fa-save mr-2"></i> Update Guru';
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        }
+        
+        async function hapusGuru(id) {
+            const result = await Swal.fire({ title: "Yakin hapus?", icon: "warning", showCancelButton: true });
+            if (result.isConfirmed && await sendToServer("deleteGuru", { id })) {
+                db.guru = db.guru.filter(g => g.ID !== id);
+                renderGuru();
+                updateDashboardStats();
+                Swal.fire("Terhapus!", "", "success");
+            }
+        }
+        
+        async function hapusSemuaGuru() {
+            const result = await Swal.fire({ title: "Hapus Semua Guru?", icon: "warning", showCancelButton: true });
+            if (result.isConfirmed && await sendToServer("deleteAllGuru", {})) {
+                db.guru = [];
+                renderGuru();
+                updateDashboardStats();
+                Swal.fire("Terhapus!", "", "success");
+            }
+        }
+        
+        document.getElementById("form-guru")?.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const editId = document.getElementById("edit-guru-id").value;
+            const payload = { ID: editId || Date.now().toString(), NIP: document.getElementById("nip-guru").value, "Nama Guru": document.getElementById("nama-guru").value, Mapel: document.getElementById("mapel-guru").value };
+            if (await sendToServer(editId ? "updateGuru" : "saveGuru", payload)) {
+                if (editId) {
+                    const idx = db.guru.findIndex(g => g.ID === editId);
+                    if (idx !== -1) db.guru[idx] = payload;
+                } else db.guru.push(payload);
+                renderGuru();
+                updateDashboardStats();
+                document.getElementById("edit-guru-id").value = "";
+                document.getElementById("form-guru").querySelector("button").innerHTML = "Tambah Guru";
+                e.target.reset();
+                Swal.fire("Berhasil", editId ? "Guru diperbarui" : "Guru ditambahkan", "success");
+            }
+        });
+        
+        function renderMapel() {
+            const tbody = document.getElementById("table-mapel");
+            tbody.innerHTML = db.mapel.map((m, i) => `
+                <tr>
+                    <td class="text-center">${i+1}</td>
+                    <td class="font-medium">${m['Nama Mapel'] || "-"}</td>
+                    <td>${m.Semester || "-"}</td>
+                    <td>${m['Tahun Ajaran'] || "-"}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editMapel('${m.ID}')"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button class="action-btn btn-delete" onclick="hapusMapel('${m.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button>
+                    </td>
+                </tr>
+            `).join("");
+        }
+        
+        function editMapel(id) {
+            const mapel = db.mapel.find(m => m.ID === id);
+            if (mapel) {
+                document.getElementById("edit-mapel-id").value = mapel.ID;
+                document.getElementById("nama-mapel").value = mapel['Nama Mapel'];
+                document.getElementById("semester").value = mapel.Semester;
+                document.getElementById("tahun-ajaran").value = mapel['Tahun Ajaran'];
+                document.getElementById("form-mapel").querySelector("button").innerHTML = '<i class="fa-solid fa-save mr-2"></i> Update Mapel';
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        }
+        
+        async function hapusMapel(id) {
+            const result = await Swal.fire({ title: "Yakin hapus?", icon: "warning", showCancelButton: true });
+            if (result.isConfirmed && await sendToServer("deleteMapel", { id })) {
+                db.mapel = db.mapel.filter(m => m.ID !== id);
+                renderMapel();
+                refreshAllSelectors();
+                updateDashboardStats();
+                Swal.fire("Terhapus!", "", "success");
+            }
+        }
+        
+        async function hapusSemuaMapel() {
+            const result = await Swal.fire({ title: "Hapus Semua Mapel?", icon: "warning", showCancelButton: true });
+            if (result.isConfirmed && await sendToServer("deleteAllMapel", {})) {
+                db.mapel = [];
+                renderMapel();
+                refreshAllSelectors();
+                updateDashboardStats();
+                Swal.fire("Terhapus!", "", "success");
+            }
+        }
+        
+        document.getElementById("form-mapel")?.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const editId = document.getElementById("edit-mapel-id").value;
+            const payload = { ID: editId || Date.now().toString(), "Nama Mapel": document.getElementById("nama-mapel").value, Semester: document.getElementById("semester").value, "Tahun Ajaran": document.getElementById("tahun-ajaran").value };
+            if (await sendToServer(editId ? "updateMapel" : "saveMapel", payload)) {
+                if (editId) {
+                    const idx = db.mapel.findIndex(m => m.ID === editId);
+                    if (idx !== -1) db.mapel[idx] = payload;
+                } else db.mapel.push(payload);
+                renderMapel();
+                refreshAllSelectors();
+                updateDashboardStats();
+                document.getElementById("edit-mapel-id").value = "";
+                document.getElementById("form-mapel").querySelector("button").innerHTML = "Tambah Mapel";
+                e.target.reset();
+                Swal.fire("Berhasil", editId ? "Mapel diperbarui" : "Mapel ditambahkan", "success");
+            }
+        });
+        
+        function renderPelanggaran() {
+            const tbody = document.getElementById("table-pelanggaran");
+            tbody.innerHTML = db.pelanggaran.map((p, i) => {
+                let poinClass = "poin-sedang";
+                if (p.Poin <= 10) poinClass = "poin-rendah";
+                else if (p.Poin >= 50) poinClass = "poin-tinggi";
+                return `
+                    <tr>
+                        <td class="text-center">${i+1}</td>
+                        <td class="font-medium">${p['Nama Siswa'] || "-"}</td>
+                        <td>${p.Kelas || "-"}</td>
+                        <td>${p.Pelanggaran || "-"}</td>
+                        <td><span class="poin-badge ${poinClass}">${p.Poin || 0} Poin</span></td>
+                        <td>${p.Tanggal || "-"}</td>
+                        <td>${p.Keterangan || "-"}</td>
+                        <td>
+                            <button class="action-btn btn-edit" onclick="editPelanggaran('${p.ID}')"><i class="fa-solid fa-pen"></i></button>
+                            <button class="action-btn btn-delete" onclick="hapusPelanggaran('${p.ID}')"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join("");
+        }
+        
+        function editPelanggaran(id) {
+            const pelanggaran = db.pelanggaran.find(p => p.ID === id);
+            if (pelanggaran) {
+                document.getElementById("edit-pelanggaran-id").value = pelanggaran.ID;
+                document.getElementById("pelanggaran-siswa").value = pelanggaran['Nama Siswa'];
+                document.getElementById("pelanggaran-nama").value = pelanggaran.Pelanggaran;
+                document.getElementById("pelanggaran-poin").value = pelanggaran.Poin;
+                document.getElementById("pelanggaran-tanggal").value = pelanggaran.Tanggal;
+                document.getElementById("pelanggaran-keterangan").value = pelanggaran.Keterangan || "";
+                document.getElementById("form-pelanggaran").querySelector("button").innerHTML = '<i class="fa-solid fa-save mr-2"></i> Update Pelanggaran';
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        }
+        
+        async function hapusPelanggaran(id) {
+            const result = await Swal.fire({ title: "Yakin hapus?", icon: "warning", showCancelButton: true });
+            if (result.isConfirmed && await sendToServer("deletePelanggaran", { id })) {
+                db.pelanggaran = db.pelanggaran.filter(p => p.ID !== id);
+                renderPelanggaran();
+                updateDashboardStats();
+                Swal.fire("Terhapus!", "", "success");
+            }
+        }
+        
+        async function hapusSemuaPelanggaran() {
+            const result = await Swal.fire({ title: "Hapus Semua Pelanggaran?", icon: "warning", showCancelButton: true });
+            if (result.isConfirmed && await sendToServer("deleteAllPelanggaran", {})) {
+                db.pelanggaran = [];
+                renderPelanggaran();
+                updateDashboardStats();
+                Swal.fire("Terhapus!", "", "success");
+            }
+        }
+        
+        document.getElementById("form-pelanggaran")?.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const editId = document.getElementById("edit-pelanggaran-id").value;
+            const selectedSiswa = document.getElementById("pelanggaran-siswa").value;
+            const siswaData = db.siswa.find(s => (s['Nama Siswa'] || s.Nama) === selectedSiswa);
+            const payload = {
+                ID: editId || Date.now().toString(),
+                "Nama Siswa": selectedSiswa,
+                Kelas: siswaData ? siswaData.Kelas : "",
+                Pelanggaran: document.getElementById("pelanggaran-nama").value,
+                Poin: parseInt(document.getElementById("pelanggaran-poin").value) || 0,
+                Tanggal: document.getElementById("pelanggaran-tanggal").value,
+                Keterangan: document.getElementById("pelanggaran-keterangan").value
+            };
+            if (await sendToServer(editId ? "updatePelanggaran" : "savePelanggaran", payload)) {
+                if (editId) {
+                    const idx = db.pelanggaran.findIndex(p => p.ID === editId);
+                    if (idx !== -1) db.pelanggaran[idx] = payload;
+                } else db.pelanggaran.push(payload);
+                renderPelanggaran();
+                updateDashboardStats();
+                document.getElementById("edit-pelanggaran-id").value = "";
+                document.getElementById("form-pelanggaran").querySelector("button").innerHTML = "Tambah Pelanggaran";
+                e.target.reset();
+                Swal.fire("Berhasil", editId ? "Pelanggaran diperbarui" : "Pelanggaran ditambahkan", "success");
+            }
+        });
+        
+        function renderJadwal() {
+            const tbody = document.getElementById("table-jadwal");
+            tbody.innerHTML = db.jadwal.map((j, i) => `
+                <tr>
+                    <td class="font-medium">${j.Hari || "-"}</td>
+                    <td>${j.Jam || "-"}</td>
+                    <td>${j.Kelas || "-"}</td>
+                    <td>${j.Mapel || "-"}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editJadwal('${j.ID}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="action-btn btn-delete" onclick="hapusJadwal('${j.ID}')"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join("");
+        }
+        
+        function editJadwal(id) {
+            const jadwal = db.jadwal.find(j => j.ID === id);
+            if (jadwal) {
+                document.getElementById("edit-jadwal-id").value = jadwal.ID;
+                document.getElementById("jadwal-hari").value = jadwal.Hari;
+                document.getElementById("jadwal-jam").value = jadwal.Jam;
+                document.getElementById("jadwal-kelas").value = jadwal.Kelas;
+                document.getElementById("jadwal-mapel").value = jadwal.Mapel;
+                document.getElementById("form-jadwal").querySelector("button").innerHTML = '<i class="fa-solid fa-save mr-2"></i> Update Jadwal';
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        }
+        
+        async function hapusJadwal(id) {
+            const result = await Swal.fire({ title: "Yakin hapus?", icon: "warning", showCancelButton: true });
+            if (result.isConfirmed && await sendToServer("deleteJadwal", { id })) {
+                db.jadwal = db.jadwal.filter(j => j.ID !== id);
+                renderJadwal();
+                Swal.fire("Terhapus!", "", "success");
+            }
+        }
+        
+        async function hapusSemuaJadwal() {
+            const result = await Swal.fire({ title: "Hapus Semua Jadwal?", icon: "warning", showCancelButton: true });
+            if (result.isConfirmed && await sendToServer("deleteAllJadwal", {})) {
+                db.jadwal = [];
+                renderJadwal();
+                Swal.fire("Terhapus!", "", "success");
+            }
+        }
+        
+        document.getElementById("form-jadwal")?.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const editId = document.getElementById("edit-jadwal-id").value;
+            const payload = {
+                ID: editId || Date.now().toString(),
+                Hari: document.getElementById("jadwal-hari").value,
+                Jam: document.getElementById("jadwal-jam").value,
+                Kelas: document.getElementById("jadwal-kelas").value,
+                Mapel: document.getElementById("jadwal-mapel").value
+            };
+            if (await sendToServer(editId ? "updateJadwal" : "saveJadwal", payload)) {
+                if (editId) {
+                    const idx = db.jadwal.findIndex(j => j.ID === editId);
+                    if (idx !== -1) db.jadwal[idx] = payload;
+                } else db.jadwal.push(payload);
+                renderJadwal();
+                document.getElementById("edit-jadwal-id").value = "";
+                document.getElementById("form-jadwal").querySelector("button").innerHTML = "Tambah";
+                e.target.reset();
+                Swal.fire("Berhasil", editId ? "Jadwal diperbarui" : "Jadwal ditambahkan", "success");
+            }
+        });
+        
+        function renderAgenda() {
+            const tbody = document.getElementById("table-agenda");
+            tbody.innerHTML = db.agenda.map((a, i) => `
+                <tr>
+                    <td>${a.Tanggal || "-"}</td>
+                    <td>${a.Jam || "-"}</td>
+                    <td>${a.Kelas || "-"}</td>
+                    <td>${a.Mapel || "-"}</td>
+                    <td class="whitespace-normal">${a.Materi || "-"}</td>
+                    <td><span class="px-2 py-1 rounded-full text-xs ${a.Status === 'Terlaksana' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}">${a.Status || "-"}</span></td>
+                    <td>${a['Absen Siswa'] || "-"}</td>
+                    <td>${a.Ket || "-"}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editAgenda('${a.ID}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="action-btn btn-delete" onclick="hapusAgenda('${a.ID}')"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join("");
+        }
+        
+        function editAgenda(id) {
+            const agenda = db.agenda.find(a => a.ID === id);
+            if (agenda) {
+                document.getElementById("edit-agenda-id").value = agenda.ID;
+                document.getElementById("agenda-tanggal").value = agenda.Tanggal;
+                document.getElementById("agenda-jam").value = agenda.Jam;
+                document.getElementById("agenda-kelas").value = agenda.Kelas;
+                document.getElementById("agenda-mapel").value = agenda.Mapel;
+                document.getElementById("agenda-materi").value = agenda.Materi;
+                document.getElementById("agenda-status").value = agenda.Status;
+                document.getElementById("agenda-absen").value = agenda['Absen Siswa'];
+                document.getElementById("agenda-keterangan").value = agenda.Ket || "";
+                document.getElementById("form-agenda").querySelector("button").innerHTML = '<i class="fa-solid fa-save mr-2"></i> Update Jurnal';
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        }
+        
+        async function hapusAgenda(id) {
+            const result = await Swal.fire({ title: "Yakin hapus?", icon: "warning", showCancelButton: true });
+            if (result.isConfirmed && await sendToServer("deleteAgenda", { id })) {
+                db.agenda = db.agenda.filter(a => a.ID !== id);
+                renderAgenda();
+                Swal.fire("Terhapus!", "", "success");
+            }
+        }
+        
+        async function hapusSemuaAgenda() {
+            const result = await Swal.fire({ title: "Hapus Semua Agenda?", icon: "warning", showCancelButton: true });
+            if (result.isConfirmed && await sendToServer("deleteAllAgenda", {})) {
+                db.agenda = [];
+                renderAgenda();
+                Swal.fire("Terhapus!", "", "success");
+            }
+        }
+        
+        document.getElementById("form-agenda")?.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const editId = document.getElementById("edit-agenda-id").value;
+            const payload = {
+                ID: editId || Date.now().toString(),
+                Tanggal: document.getElementById("agenda-tanggal").value,
+                Jam: document.getElementById("agenda-jam").value,
+                Kelas: document.getElementById("agenda-kelas").value,
+                Mapel: document.getElementById("agenda-mapel").value,
+                Materi: document.getElementById("agenda-materi").value,
+                Status: document.getElementById("agenda-status").value,
+                "Absen Siswa": document.getElementById("agenda-absen").value,
+                Ket: document.getElementById("agenda-keterangan").value,
+                "Nama Guru": db.config.Nama_Guru || "Guru"
+            };
+            if (await sendToServer(editId ? "updateAgenda" : "saveAgenda", payload)) {
+                if (editId) {
+                    const idx = db.agenda.findIndex(a => a.ID === editId);
+                    if (idx !== -1) db.agenda[idx] = payload;
+                } else db.agenda.push(payload);
+                renderAgenda();
+                document.getElementById("edit-agenda-id").value = "";
+                document.getElementById("form-agenda").querySelector("button").innerHTML = "Simpan Jurnal";
+                e.target.reset();
+                document.getElementById("agenda-tanggal").valueAsDate = new Date();
+                Swal.fire("Berhasil", editId ? "Agenda diperbarui" : "Agenda ditambahkan", "success");
+            }
+        });
+        
+        function renderBimbingan() {
+            const tbody = document.getElementById("table-bimbingan");
+            tbody.innerHTML = db.bimbingan.map((b, i) => `
+                <tr>
+                    <td>${b.Tanggal || "-"}</td>
+                    <td class="font-medium">${b['Nama Siswa'] || "-"}</td>
+                    <td>${b.Kelas || "-"}</td>
+                    <td>${b.Jenis || "-"}</td>
+                    <td class="whitespace-normal">${b.Kasus || "-"}</td>
+                    <td class="whitespace-normal">${b['Tindak Lanjut'] || "-"}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editBimbingan('${b.ID}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="action-btn btn-delete" onclick="hapusBimbingan('${b.ID}')"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join("");
+        }
+        
+        function editBimbingan(id) {
+            const bimbingan = db.bimbingan.find(b => b.ID === id);
+            if (bimbingan) {
+                document.getElementById("edit-bimbingan-id").value = bimbingan.ID;
+                document.getElementById("bimbingan-siswa").value = bimbingan['Nama Siswa'];
+                document.getElementById("bimbingan-kelas").value = bimbingan.Kelas;
+                document.getElementById("bimbingan-tanggal").value = bimbingan.Tanggal;
+                document.getElementById("bimbingan-jenis").value = bimbingan.Jenis;
+                document.getElementById("bimbingan-masalah").value = bimbingan.Kasus;
+                document.getElementById("bimbingan-solusi").value = bimbingan['Tindak Lanjut'];
+                document.getElementById("form-bimbingan").querySelector("button").innerHTML = '<i class="fa-solid fa-save mr-2"></i> Update Catatan';
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        }
+        
+        async function hapusBimbingan(id) {
+            const result = await Swal.fire({ title: "Yakin hapus?", icon: "warning", showCancelButton: true });
+            if (result.isConfirmed && await sendToServer("deleteBimbingan", { id })) {
+                db.bimbingan = db.bimbingan.filter(b => b.ID !== id);
+                renderBimbingan();
+                Swal.fire("Terhapus!", "", "success");
+            }
+        }
+        
+        async function hapusSemuaSiswaBimbingan() {
+            const result = await Swal.fire({ title: "Hapus Semua Siswa Bimbingan?", icon: "warning", showCancelButton: true });
+            if (result.isConfirmed && await sendToServer("deleteAllSiswaBimbingan", {})) {
+                db.siswaBimbingan = [];
+                refreshAllSelectors();
+                Swal.fire("Terhapus!", "", "success");
+            }
+        }
+        
+        document.getElementById("form-daftar-siswa")?.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const nama = document.getElementById("daftar-nama").value;
+            const kelas = document.getElementById("daftar-kelas").value;
+            if (db.siswaBimbingan.some(s => s['Nama Siswa'] === nama)) {
+                Swal.fire("Info", "Siswa sudah terdaftar", "info");
+                return;
+            }
+            const payload = { ID: Date.now().toString(), "Nama Siswa": nama, Kelas: kelas };
+            if (await sendToServer("saveSiswaBimbingan", payload)) {
+                db.siswaBimbingan.push(payload);
+                refreshAllSelectors();
+                e.target.reset();
+                Swal.fire("Berhasil", "Siswa ditambahkan ke daftar bimbingan", "success");
+            }
+        });
+        
+        function setKelasBimbingan() {
+            const sel = document.getElementById("bimbingan-siswa");
+            const kelas = sel.options[sel.selectedIndex]?.dataset.kelas || "";
+            document.getElementById("bimbingan-kelas").value = kelas;
+        }
+        
+        document.getElementById("form-bimbingan")?.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const editId = document.getElementById("edit-bimbingan-id").value;
+            const payload = {
+                ID: editId || Date.now().toString(),
+                Tanggal: document.getElementById("bimbingan-tanggal").value,
+                "Nama Siswa": document.getElementById("bimbingan-siswa").value,
+                Kelas: document.getElementById("bimbingan-kelas").value,
+                Jenis: document.getElementById("bimbingan-jenis").value,
+                Kasus: document.getElementById("bimbingan-masalah").value,
+                "Tindak Lanjut": document.getElementById("bimbingan-solusi").value,
+                "Guru Wali": db.config.Nama_Guru || "Guru"
+            };
+            if (await sendToServer(editId ? "updateBimbingan" : "saveBimbingan", payload)) {
+                if (editId) {
+                    const idx = db.bimbingan.findIndex(b => b.ID === editId);
+                    if (idx !== -1) db.bimbingan[idx] = payload;
+                } else db.bimbingan.push(payload);
+                renderBimbingan();
+                document.getElementById("edit-bimbingan-id").value = "";
+                document.getElementById("form-bimbingan").querySelector("button").innerHTML = "Simpan Catatan";
+                e.target.reset();
+                document.getElementById("bimbingan-tanggal").valueAsDate = new Date();
+                Swal.fire("Berhasil", editId ? "Catatan diperbarui" : "Catatan ditambahkan", "success");
+            }
+        });
+        
+        // ============================================
+        // ABSENSI FUNCTIONS
         // ============================================
         
         function switchAbsensiJenis(jenis) {
@@ -685,12 +1301,12 @@
             }
         }
         
-        // ============================================
-        // ABSENSI SISWA FUNCTIONS
-        // ============================================
-        
         function setHadirSemuaSiswa() {
             document.querySelectorAll('#table-absensi-siswa input[type="radio"]').forEach(r => { if (r.value === "Hadir") r.checked = true; });
+        }
+        
+        function setHadirSemuaGuru() {
+            document.querySelectorAll('#table-absensi-guru input[type="radio"]').forEach(r => { if (r.value === "Hadir") r.checked = true; });
         }
         
         function loadAbsensiSiswaList() {
@@ -699,7 +1315,7 @@
             const mapel = document.getElementById("absensi-siswa-mapel").value;
             const tbody = document.getElementById("table-absensi-siswa");
             if (!tgl || !kelas || !mapel) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8">Pilih Tanggal, Kelas, dan Mapel</td></tr>';
+                tbody.innerHTML = 'berguna<td colspan="6" class="text-center py-8">Pilih Tanggal, Kelas, dan Mapel</td>berguna';
                 return;
             }
             const siswaKelas = db.siswa.filter(s => s.Kelas === kelas);
@@ -714,7 +1330,7 @@
                     <td class="text-center"><input type="radio" name="abs_siswa_${i}" value="Izin" ${status === "Izin" || status === "I" ? "checked" : ""} class="accent-yellow-500"></td>
                     <td class="text-center"><input type="radio" name="abs_siswa_${i}" value="Sakit" ${status === "Sakit" || status === "S" ? "checked" : ""} class="accent-blue-500"></td>
                     <td class="text-center"><input type="radio" name="abs_siswa_${i}" value="Alpa" ${status === "Alpa" || status === "A" ? "checked" : ""} class="accent-red-600"></td>
-                </tr>`;
+                 </tr>`;
             }).join("");
         }
         
@@ -740,20 +1356,12 @@
             }
         }
         
-        // ============================================
-        // ABSENSI GURU FUNCTIONS
-        // ============================================
-        
-        function setHadirSemuaGuru() {
-            document.querySelectorAll('#table-absensi-guru input[type="radio"]').forEach(r => { if (r.value === "Hadir") r.checked = true; });
-        }
-        
         function loadAbsensiGuruList() {
             const tgl = document.getElementById("absensi-guru-tanggal").value;
             const mapel = document.getElementById("absensi-guru-mapel").value;
             const tbody = document.getElementById("table-absensi-guru");
             if (!tgl) {
-                tbody.innerHTML = '<tr><td colspan="8" class="text-center py-8">Pilih Tanggal</td></tr>';
+                tbody.innerHTML = 'berguna<td colspan="8" class="text-center py-8">Pilih Tanggal</td>berguna';
                 return;
             }
             let guruList = db.guru;
@@ -773,7 +1381,7 @@
                     <td class="text-center"><input type="radio" name="abs_guru_${i}" value="Izin" ${status === "Izin" || status === "I" ? "checked" : ""} class="accent-yellow-500"></td>
                     <td class="text-center"><input type="radio" name="abs_guru_${i}" value="Sakit" ${status === "Sakit" || status === "S" ? "checked" : ""} class="accent-blue-500"></td>
                     <td class="text-center"><input type="radio" name="abs_guru_${i}" value="Alpa" ${status === "Alpa" || status === "A" ? "checked" : ""} class="accent-red-600"></td>
-                </tr>`;
+                 </tr>`;
             }).join("");
         }
         
@@ -783,19 +1391,14 @@
             const records = [];
             document.querySelectorAll('#table-absensi-guru tr[data-id]').forEach(tr => {
                 const radio = tr.querySelector('input[type="radio"]:checked');
-                records.push({ 
-                    ID_Guru: tr.dataset.id, 
-                    Nama_Guru: tr.dataset.nama, 
-                    NIP: tr.dataset.nip,
-                    Status: radio ? radio.value : "Hadir" 
-                });
+                records.push({ ID_Guru: tr.dataset.id, Nama_Guru: tr.dataset.nama, NIP: tr.dataset.nip, Status: radio ? radio.value : "Hadir" });
             });
             if (await sendToServer("saveAbsensiGuru", { tanggal: tgl, records, admin: db.config.Nama_Guru || "Admin" })) {
                 const [thn, bln] = tgl.split("-");
                 records.forEach(rec => {
                     const idx = db.absensiGuru.findIndex(a => (a.Tanggal === tgl || a.Waktu === tgl) && String(a.ID_Guru) === String(rec.ID_Guru));
                     if (idx > -1) db.absensiGuru[idx].Status = rec.Status;
-                    else db.absensiGuru.push({ Waktu: tgl, Tanggal: tgl, ID_Guru: rec.ID_Guru, "Nama Guru": rec.Nama_Guru, NIP: rec.NIP, Status: rec.Status, "Admin": db.config.Nama_Guru || "Admin", Bulan: bln, Tahun: thn });
+                    else db.absensiGuru.push({ Waktu: tgl, Tanggal: tgl, ID_Guru: rec.ID_Guru, "Nama Guru": rec.Nama_Guru, NIP: rec.NIP, Status: rec.Status, Admin: db.config.Nama_Guru || "Admin", Bulan: bln, Tahun: thn });
                 });
                 updateDashboardStats();
                 Swal.fire("Berhasil", "Absensi guru tersimpan", "success");
@@ -943,7 +1546,7 @@
                 const [thn, bln] = tgl.split("-");
                 const idx = db.absensiGuru.findIndex(a => (a.Tanggal === tgl || a.Waktu === tgl) && String(a.ID_Guru) === String(data));
                 if (idx > -1) db.absensiGuru[idx].Status = "Hadir";
-                else db.absensiGuru.push({ Waktu: tgl, Tanggal: tgl, ID_Guru: data, "Nama Guru": guru['Nama Guru'] || guru.Nama, NIP: guru.NIP, Status: "Hadir", "Admin": "Scanner", Bulan: bln, Tahun: thn });
+                else db.absensiGuru.push({ Waktu: tgl, Tanggal: tgl, ID_Guru: data, "Nama Guru": guru['Nama Guru'] || guru.Nama, NIP: guru.NIP, Status: "Hadir", Admin: "Scanner", Bulan: bln, Tahun: thn });
                 updateDashboardStats();
                 resultDiv.innerText = `BERHASIL: ${guru['Nama Guru'] || guru.Nama} telah absen!`;
                 resultDiv.className = "mt-4 p-4 rounded-lg bg-green-50 text-green-800 text-center font-bold";
@@ -968,439 +1571,6 @@
         }
         
         // ============================================
-        // LAPORAN FUNCTIONS
-        // ============================================
-        
-        function tampilkanLaporanAbsensiSiswa(tipe) {
-            const kelas = document.getElementById("laporan-absensi-siswa-kelas").value;
-            const mapel = document.getElementById("laporan-absensi-siswa-mapel").value;
-            const bulan = document.getElementById("laporan-absensi-siswa-bulan").value;
-            if (!kelas || !mapel) { Swal.fire("Peringatan", "Pilih kelas dan mapel!", "warning"); return; }
-            lastReportData = { kelas, mapel, jenis: "siswa" };
-            let filtered = db.absensiSiswa.filter(a => a.Kelas === kelas && a.Mapel === mapel);
-            if (bulan !== "ALL") filtered = filtered.filter(a => a.Bulan === bulan);
-            const siswaList = db.siswa.filter(s => s.Kelas === kelas).map(s => s['Nama Siswa'] || s.Nama);
-            let html = "";
-            if (tipe === "rekap") {
-                html = `<thead><tr><th>No</th><th>Nama Siswa</th><th>H</th><th>I</th><th>S</th><th>A</th><th>% Hadir</th></tr></thead><tbody>`;
-                siswaList.forEach((nama, i) => {
-                    const absSiswa = filtered.filter(a => a['Nama Siswa'] === nama);
-                    let h = 0, iz = 0, s = 0, a = 0;
-                    absSiswa.forEach(abs => { const st = String(abs.Status).charAt(0).toUpperCase(); if (st === "H") h++; else if (st === "I") iz++; else if (st === "S") s++; else if (st === "A") a++; });
-                    const total = h + iz + s + a;
-                    html += `<tr><td class="text-center">${i + 1}</td><td>${nama}</td><td class="text-center font-bold">${h}</td><td class="text-center">${iz}</td><td class="text-center">${s}</td><td class="text-center">${a}</td><td class="text-center">${total > 0 ? Math.round((h / total) * 100) : 0}%</td></tr>`;
-                });
-            } else {
-                html = `<thead><tr><th>Tanggal</th><th>Nama Siswa</th><th>Status</th></tr></thead><tbody>`;
-                filtered.sort((a, b) => (b.Tanggal || b.Waktu).localeCompare(a.Tanggal || a.Waktu)).forEach(abs => {
-                    html += `<tr><td>${abs.Tanggal || abs.Waktu}</td><td>${abs['Nama Siswa']}</td><td class="text-center"><span class="px-2 py-1 rounded-full text-xs ${abs.Status === 'Hadir' ? 'bg-green-100 text-green-700' : abs.Status === 'Izin' ? 'bg-yellow-100 text-yellow-700' : abs.Status === 'Sakit' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700'}">${abs.Status}</span></td></tr>`;
-                });
-            }
-            document.getElementById("tabel-absensi-siswa").innerHTML = html;
-            document.getElementById("area-absensi-siswa").classList.remove("hidden");
-        }
-        
-        function tampilkanLaporanAbsensiGuru(tipe) {
-            const mapel = document.getElementById("laporan-absensi-guru-mapel").value;
-            const bulan = document.getElementById("laporan-absensi-guru-bulan").value;
-            lastReportData = { mapel, jenis: "guru" };
-            let filtered = db.absensiGuru;
-            if (mapel && mapel !== "ALL") filtered = filtered.filter(a => a.Mapel === mapel);
-            if (bulan !== "ALL") filtered = filtered.filter(a => a.Bulan === bulan);
-            const guruList = db.guru;
-            let html = "";
-            if (tipe === "rekap") {
-                html = `<thead><tr><th>No</th><th>NIP</th><th>Nama Guru</th><th>Mapel</th><th>H</th><th>I</th><th>S</th><th>A</th><th>% Hadir</th></tr></thead><tbody>`;
-                guruList.forEach((guru, i) => {
-                    const absGuru = filtered.filter(a => a['Nama Guru'] === (guru['Nama Guru'] || guru.Nama));
-                    let h = 0, iz = 0, s = 0, a = 0;
-                    absGuru.forEach(abs => { const st = String(abs.Status).charAt(0).toUpperCase(); if (st === "H") h++; else if (st === "I") iz++; else if (st === "S") s++; else if (st === "A") a++; });
-                    const total = h + iz + s + a;
-                    html += `<tr><td class="text-center">${i + 1}</td><td>${guru.NIP || "-"}</td><td>${guru['Nama Guru'] || guru.Nama}</td><td>${guru.Mapel || "-"}</td><td class="text-center font-bold">${h}</td><td class="text-center">${iz}</td><td class="text-center">${s}</td><td class="text-center">${a}</td><td class="text-center">${total > 0 ? Math.round((h / total) * 100) : 0}%</td></tr>`;
-                });
-            } else {
-                html = `<thead><tr><th>Tanggal</th><th>Nama Guru</th><th>NIP</th><th>Status</th></tr></thead><tbody>`;
-                filtered.sort((a, b) => (b.Tanggal || b.Waktu).localeCompare(a.Tanggal || a.Waktu)).forEach(abs => {
-                    html += `<tr><td>${abs.Tanggal || abs.Waktu}</td><td>${abs['Nama Guru']}</td><td>${abs.NIP || "-"}</td><td class="text-center"><span class="px-2 py-1 rounded-full text-xs ${abs.Status === 'Hadir' ? 'bg-green-100 text-green-700' : abs.Status === 'Izin' ? 'bg-yellow-100 text-yellow-700' : abs.Status === 'Sakit' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700'}">${abs.Status}</span></td></tr>`;
-                });
-            }
-            document.getElementById("tabel-absensi-guru").innerHTML = html;
-            document.getElementById("area-absensi-guru").classList.remove("hidden");
-        }
-        
-        // ============================================
-        // DASHBOARD FUNCTIONS
-        // ============================================
-        
-        function updateDashboardStats() {
-            document.getElementById("stat-siswa").innerText = db.siswa.length;
-            document.getElementById("stat-guru").innerText = db.guru.length;
-            document.getElementById("stat-mapel").innerText = db.mapel.length;
-            const totalPoin = db.pelanggaran.reduce((sum, p) => sum + (parseInt(p.Poin) || 0), 0);
-            document.getElementById("stat-pelanggaran").innerText = totalPoin;
-            
-            const today = new Date().toISOString().split("T")[0];
-            const todayAbsSiswa = db.absensiSiswa.filter(a => a.Tanggal === today || a.Waktu === today);
-            if (todayAbsSiswa.length > 0) {
-                const hadir = todayAbsSiswa.filter(a => a.Status === "Hadir" || a.Status === "H").length;
-                document.getElementById("stat-hadir-siswa").innerText = Math.round((hadir / todayAbsSiswa.length) * 100) + "%";
-            } else document.getElementById("stat-hadir-siswa").innerText = "0%";
-            
-            const todayAbsGuru = db.absensiGuru.filter(a => a.Tanggal === today || a.Waktu === today);
-            if (todayAbsGuru.length > 0) {
-                const hadir = todayAbsGuru.filter(a => a.Status === "Hadir" || a.Status === "H").length;
-                document.getElementById("stat-hadir-guru").innerText = Math.round((hadir / todayAbsGuru.length) * 100) + "%";
-            } else document.getElementById("stat-hadir-guru").innerText = "0%";
-            
-            updateCharts();
-        }
-        
-        function updateCharts() {
-            const last7Days = Array.from({ length: 7 }, (_, i) => { const d = new Date(); d.setDate(d.getDate() - (6 - i)); return d.toISOString().split("T")[0]; });
-            
-            // Chart kehadiran siswa
-            const kehadiranSiswaData = last7Days.map(tgl => {
-                const abs = db.absensiSiswa.filter(a => a.Tanggal === tgl || a.Waktu === tgl);
-                if (abs.length === 0) return 0;
-                const hadir = abs.filter(a => a.Status === "Hadir" || a.Status === "H").length;
-                return Math.round((hadir / abs.length) * 100);
-            });
-            const ctxSiswa = document.getElementById("chart-kehadiran-siswa")?.getContext("2d");
-            if (ctxSiswa) {
-                if (chartKehadiranSiswa) chartKehadiranSiswa.destroy();
-                chartKehadiranSiswa = new Chart(ctxSiswa, {
-                    type: "bar",
-                    data: { labels: last7Days.map(d => d.substring(5)), datasets: [{ label: "Kehadiran Siswa (%)", data: kehadiranSiswaData, backgroundColor: "#1e3a8a", borderRadius: 8 }] },
-                    options: { responsive: true, maintainAspectRatio: true }
-                });
-            }
-            
-            // Chart kehadiran guru
-            const kehadiranGuruData = last7Days.map(tgl => {
-                const abs = db.absensiGuru.filter(a => a.Tanggal === tgl || a.Waktu === tgl);
-                if (abs.length === 0) return 0;
-                const hadir = abs.filter(a => a.Status === "Hadir" || a.Status === "H").length;
-                return Math.round((hadir / abs.length) * 100);
-            });
-            const ctxGuru = document.getElementById("chart-kehadiran-guru")?.getContext("2d");
-            if (ctxGuru) {
-                if (chartKehadiranGuru) chartKehadiranGuru.destroy();
-                chartKehadiranGuru = new Chart(ctxGuru, {
-                    type: "bar",
-                    data: { labels: last7Days.map(d => d.substring(5)), datasets: [{ label: "Kehadiran Guru (%)", data: kehadiranGuruData, backgroundColor: "#10b981", borderRadius: 8 }] },
-                    options: { responsive: true, maintainAspectRatio: true }
-                });
-            }
-            
-            // Chart nilai
-            const mapelList = [...new Set(db.nilai.map(n => n.Mapel))];
-            const nilaiRata = mapelList.map(mpl => {
-                const nilaiMpl = db.nilai.filter(n => n.Mapel === mpl && n.Nilai);
-                if (nilaiMpl.length === 0) return 0;
-                const total = nilaiMpl.reduce((s, n) => s + (parseFloat(n.Nilai) || 0), 0);
-                return Math.round(total / nilaiMpl.length);
-            });
-            const ctxNilai = document.getElementById("chart-nilai")?.getContext("2d");
-            if (ctxNilai) {
-                if (chartNilai) chartNilai.destroy();
-                chartNilai = new Chart(ctxNilai, {
-                    type: "line",
-                    data: { labels: mapelList.length ? mapelList : ["Data"], datasets: [{ label: "Rata-rata Nilai", data: nilaiRata.length ? nilaiRata : [0], borderColor: "#f59e0b", backgroundColor: "rgba(245,158,11,0.1)", tension: 0.4, fill: true }] },
-                    options: { responsive: true, maintainAspectRatio: true }
-                });
-            }
-        }
-        
-        // ============================================
-        // REFRESH FUNCTIONS
-        // ============================================
-        
-        function refreshAllSelectors() {
-            const kelasSet = [...new Set(db.siswa.map(s => s.Kelas))].sort();
-            const kelasHtml = `<option value="">Pilih Kelas</option>${kelasSet.map(k => `<option value="${k}">${k}</option>`).join("")}`;
-            ["absensi-siswa-kelas", "penilaian-kelas", "jadwal-kelas", "laporan-absensi-siswa-kelas", "laporan-nilai-kelas", "agenda-kelas", "laporan-pelanggaran-kelas"].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.innerHTML = kelasHtml;
-            });
-            
-            const mapelHtml = `<option value="">Pilih Mapel</option>${db.mapel.map(m => `<option value="${m['Nama Mapel']}">${m['Nama Mapel']}</option>`).join("")}`;
-            ["absensi-siswa-mapel", "penilaian-mapel", "jadwal-mapel", "laporan-absensi-siswa-mapel", "laporan-nilai-mapel", "agenda-mapel", "laporan-absensi-guru-mapel"].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.innerHTML = mapelHtml;
-            });
-            
-            const siswaHtml = `<option value="">Pilih Siswa</option>${db.siswa.map(s => `<option value="${s['Nama Siswa'] || s.Nama}" data-kelas="${s.Kelas}">${s['Nama Siswa'] || s.Nama} (${s.Kelas})</option>`).join("")}`;
-            const pelanggaranSiswa = document.getElementById("pelanggaran-siswa");
-            if (pelanggaranSiswa) pelanggaranSiswa.innerHTML = siswaHtml;
-            
-            const bimbinganHtml = `<option value="">Pilih Siswa</option>${db.siswaBimbingan.map(s => `<option value="${s['Nama Siswa']}" data-kelas="${s.Kelas}">${s['Nama Siswa']} (${s.Kelas})</option>`).join("")}`;
-            const bimbinganSel = document.getElementById("bimbingan-siswa");
-            if (bimbinganSel) bimbinganSel.innerHTML = bimbinganHtml;
-            
-            toggleKartuJenis();
-        }
-        
-        function refreshAllTables() {
-            renderSiswa();
-            renderGuru();
-            renderMapel();
-            renderPelanggaran();
-            renderJadwal();
-            renderAgenda();
-            renderBimbingan();
-            loadAbsensiSiswaList();
-            loadAbsensiGuruList();
-        }
-        
-        // ============================================
-        // CRUD FUNCTIONS (Ringkasan)
-        // ============================================
-        
-        function renderSiswa() {
-            const tbody = document.getElementById("table-siswa");
-            tbody.innerHTML = db.siswa.map((s, i) => `
-                <tr><td class="text-center">${i+1}</td><td>${s.NISN || "-"}</td><td class="font-medium">${s['Nama Siswa'] || s.Nama || "-"}</td><td>${s.Kelas || "-"}</td>
-                <td><button class="action-btn btn-edit" onclick="editSiswa('${s.ID}')"><i class="fa-solid fa-pen"></i> Edit</button><button class="action-btn btn-delete" onclick="hapusSiswa('${s.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button></td>
-             </tr>`).join("");
-        }
-        
-        function editSiswa(id) { /* implementasi edit */ }
-        async function hapusSiswa(id) { /* implementasi hapus */ }
-        async function hapusSemuaSiswa() { /* implementasi hapus semua */ }
-        
-        document.getElementById("form-siswa")?.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const payload = { ID: Date.now().toString(), NISN: document.getElementById("nisn").value, "Nama Siswa": document.getElementById("nama-siswa").value, Kelas: document.getElementById("kelas-siswa").value };
-            if (await sendToServer("saveSiswa", payload)) {
-                db.siswa.push(payload);
-                renderSiswa();
-                refreshAllSelectors();
-                updateDashboardStats();
-                e.target.reset();
-                Swal.fire("Berhasil", "Siswa ditambahkan", "success");
-            }
-        });
-        
-        function renderGuru() {
-            const tbody = document.getElementById("table-guru");
-            tbody.innerHTML = db.guru.map((g, i) => `
-                <tr><td class="text-center">${i+1}</td><td>${g.NIP || "-"}</td><td class="font-medium">${g['Nama Guru'] || g.Nama || "-"}</td><td>${g.Mapel || "-"}</td>
-                <td><button class="action-btn btn-edit" onclick="editGuru('${g.ID}')"><i class="fa-solid fa-pen"></i> Edit</button><button class="action-btn btn-delete" onclick="hapusGuru('${g.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button></td>
-             </tr>`).join("");
-        }
-        
-        document.getElementById("form-guru")?.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const payload = { ID: Date.now().toString(), NIP: document.getElementById("nip-guru").value, "Nama Guru": document.getElementById("nama-guru").value, Mapel: document.getElementById("mapel-guru").value };
-            if (await sendToServer("saveGuru", payload)) {
-                db.guru.push(payload);
-                renderGuru();
-                refreshAllSelectors();
-                updateDashboardStats();
-                e.target.reset();
-                Swal.fire("Berhasil", "Guru ditambahkan", "success");
-            }
-        });
-        
-        function renderMapel() {
-            const tbody = document.getElementById("table-mapel");
-            tbody.innerHTML = db.mapel.map((m, i) => `
-                <tr><td class="text-center">${i+1}</td><td class="font-medium">${m['Nama Mapel'] || "-"}</td><td>${m.Semester || "-"}</td><td>${m['Tahun Ajaran'] || "-"}</td>
-                <td><button class="action-btn btn-edit" onclick="editMapel('${m.ID}')"><i class="fa-solid fa-pen"></i> Edit</button><button class="action-btn btn-delete" onclick="hapusMapel('${m.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button></td>
-             </tr>`).join("");
-        }
-        
-        document.getElementById("form-mapel")?.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const payload = { ID: Date.now().toString(), "Nama Mapel": document.getElementById("nama-mapel").value, Semester: document.getElementById("semester").value, "Tahun Ajaran": document.getElementById("tahun-ajaran").value };
-            if (await sendToServer("saveMapel", payload)) {
-                db.mapel.push(payload);
-                renderMapel();
-                refreshAllSelectors();
-                updateDashboardStats();
-                e.target.reset();
-                Swal.fire("Berhasil", "Mapel ditambahkan", "success");
-            }
-        });
-        
-        function renderPelanggaran() {
-            const tbody = document.getElementById("table-pelanggaran");
-            tbody.innerHTML = db.pelanggaran.map((p, i) => {
-                let poinClass = "poin-sedang";
-                if (p.Poin <= 10) poinClass = "poin-rendah";
-                else if (p.Poin >= 50) poinClass = "poin-tinggi";                return `
-                 tras
-                    <td class="text-center">${i+1} tras
-                    <td class="font-medium">${p['Nama Siswa'] || "-"} tras
-                    <td>${p.Kelas || "-"} tras
-                    <td>${p.Pelanggaran || "-"} tras
-                    <td><span class="poin-badge ${poinClass}">${p.Poin || 0} Poin</span> tras
-                    <td>${p.Tanggal || "-"} tras
-                    <td>${p.Keterangan || "-"} tras
-                    <td>
-                        <button class="action-btn btn-edit" onclick="editPelanggaran('${p.ID}')"><i class="fa-solid fa-pen"></i></button>
-                        <button class="action-btn btn-delete" onclick="hapusPelanggaran('${p.ID}')"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                 </tr>
-                `;
-            }).join("");
-        }
-        
-        document.getElementById("form-pelanggaran")?.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const selectedSiswa = document.getElementById("pelanggaran-siswa").value;
-            const siswaData = db.siswa.find(s => (s['Nama Siswa'] || s.Nama) === selectedSiswa);
-            const payload = {
-                ID: Date.now().toString(),
-                "Nama Siswa": selectedSiswa,
-                Kelas: siswaData ? siswaData.Kelas : "",
-                Pelanggaran: document.getElementById("pelanggaran-nama").value,
-                Poin: parseInt(document.getElementById("pelanggaran-poin").value) || 0,
-                Tanggal: document.getElementById("pelanggaran-tanggal").value,
-                Keterangan: document.getElementById("pelanggaran-keterangan").value
-            };
-            if (await sendToServer("savePelanggaran", payload)) {
-                db.pelanggaran.push(payload);
-                renderPelanggaran();
-                updateDashboardStats();
-                e.target.reset();
-                Swal.fire("Berhasil", "Pelanggaran ditambahkan", "success");
-            }
-        });
-        
-        function renderJadwal() {
-            const tbody = document.getElementById("table-jadwal");
-            tbody.innerHTML = db.jadwal.map((j, i) => `
-                 <tr>
-                    <td class="font-medium">${j.Hari || "-"} tras
-                    <td>${j.Jam || "-"} tras
-                    <td>${j.Kelas || "-"} tras
-                    <td>${j.Mapel || "-"} tras
-                    <td>
-                        <button class="action-btn btn-edit" onclick="editJadwal('${j.ID}')"><i class="fa-solid fa-pen"></i></button>
-                        <button class="action-btn btn-delete" onclick="hapusJadwal('${j.ID}')"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                 </tr>
-            `).join("");
-        }
-        
-        document.getElementById("form-jadwal")?.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const payload = {
-                ID: Date.now().toString(),
-                Hari: document.getElementById("jadwal-hari").value,
-                Jam: document.getElementById("jadwal-jam").value,
-                Kelas: document.getElementById("jadwal-kelas").value,
-                Mapel: document.getElementById("jadwal-mapel").value
-            };
-            if (await sendToServer("saveJadwal", payload)) {
-                db.jadwal.push(payload);
-                renderJadwal();
-                e.target.reset();
-                Swal.fire("Berhasil", "Jadwal ditambahkan", "success");
-            }
-        });
-        
-        function renderAgenda() {
-            const tbody = document.getElementById("table-agenda");
-            tbody.innerHTML = db.agenda.map((a, i) => `
-                 <tr>
-                    <td>${a.Tanggal || "-"} tras
-                    <td>${a.Jam || "-"} tras
-                    <td>${a.Kelas || "-"} tras
-                    <td>${a.Mapel || "-"} tras
-                    <td class="whitespace-normal">${a.Materi || "-"} tras
-                    <td><span class="px-2 py-1 rounded-full text-xs ${a.Status === 'Terlaksana' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}">${a.Status || "-"}</span> tras
-                    <td>${a['Absen Siswa'] || "-"} tras
-                    <td>${a.Ket || "-"} tras
-                    <td>
-                        <button class="action-btn btn-edit" onclick="editAgenda('${a.ID}')"><i class="fa-solid fa-pen"></i></button>
-                        <button class="action-btn btn-delete" onclick="hapusAgenda('${a.ID}')"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                 </tr>
-            `).join("");
-        }
-        
-        document.getElementById("form-agenda")?.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const payload = {
-                ID: Date.now().toString(),
-                Tanggal: document.getElementById("agenda-tanggal").value,
-                Jam: document.getElementById("agenda-jam").value,
-                Kelas: document.getElementById("agenda-kelas").value,
-                Mapel: document.getElementById("agenda-mapel").value,
-                Materi: document.getElementById("agenda-materi").value,
-                Status: document.getElementById("agenda-status").value,
-                "Absen Siswa": document.getElementById("agenda-absen").value,
-                Ket: document.getElementById("agenda-keterangan").value,
-                "Nama Guru": db.config.Nama_Guru || "Guru"
-            };
-            if (await sendToServer("saveAgenda", payload)) {
-                db.agenda.push(payload);
-                renderAgenda();
-                e.target.reset();
-                document.getElementById("agenda-tanggal").valueAsDate = new Date();
-                Swal.fire("Berhasil", "Agenda ditambahkan", "success");
-            }
-        });
-        
-        function renderBimbingan() {
-            const tbody = document.getElementById("table-bimbingan");
-            tbody.innerHTML = db.bimbingan.map((b, i) => `
-                 <tr>
-                    <td>${b.Tanggal || "-"} tras
-                    <td class="font-medium">${b['Nama Siswa'] || "-"} tras
-                    <td>${b.Kelas || "-"} tras
-                    <td>${b.Jenis || "-"} tras
-                    <td class="whitespace-normal">${b.Kasus || "-"} tras
-                    <td class="whitespace-normal">${b['Tindak Lanjut'] || "-"} tras
-                    <td>
-                        <button class="action-btn btn-edit" onclick="editBimbingan('${b.ID}')"><i class="fa-solid fa-pen"></i></button>
-                        <button class="action-btn btn-delete" onclick="hapusBimbingan('${b.ID}')"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                 </tr>
-            `).join("");
-        }
-        
-        document.getElementById("form-daftar-siswa")?.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const nama = document.getElementById("daftar-nama").value;
-            const kelas = document.getElementById("daftar-kelas").value;
-            if (db.siswaBimbingan.some(s => s['Nama Siswa'] === nama)) {
-                Swal.fire("Info", "Siswa sudah terdaftar", "info");
-                return;
-            }
-            const payload = { ID: Date.now().toString(), "Nama Siswa": nama, Kelas: kelas };
-            if (await sendToServer("saveSiswaBimbingan", payload)) {
-                db.siswaBimbingan.push(payload);
-                refreshAllSelectors();
-                e.target.reset();
-                Swal.fire("Berhasil", "Siswa ditambahkan ke daftar bimbingan", "success");
-            }
-        });
-        
-        document.getElementById("form-bimbingan")?.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const payload = {
-                ID: Date.now().toString(),
-                Tanggal: document.getElementById("bimbingan-tanggal").value,
-                "Nama Siswa": document.getElementById("bimbingan-siswa").value,
-                Kelas: document.getElementById("bimbingan-kelas").value,
-                Jenis: document.getElementById("bimbingan-jenis").value,
-                Kasus: document.getElementById("bimbingan-masalah").value,
-                "Tindak Lanjut": document.getElementById("bimbingan-solusi").value,
-                "Guru Wali": db.config.Nama_Guru || "Guru"
-            };
-            if (await sendToServer("saveBimbingan", payload)) {
-                db.bimbingan.push(payload);
-                renderBimbingan();
-                e.target.reset();
-                document.getElementById("bimbingan-tanggal").valueAsDate = new Date();
-                Swal.fire("Berhasil", "Catatan bimbingan ditambahkan", "success");
-            }
-        });
-        
-        // ============================================
         // PENILAIAN FUNCTIONS
         // ============================================
         
@@ -1410,7 +1580,7 @@
             const jenis = document.getElementById("penilaian-jenis").value;
             const tbody = document.getElementById("table-penilaian");
             if (!kelas || !mapel || !jenis) {
-                tbody.innerHTML = '<tr><td colspan="3" class="text-center py-8">Pilih Kelas, Mapel, dan Jenis Penilaian</td></tr>';
+                tbody.innerHTML = 'berguna<td colspan="3" class="text-center py-8">Pilih Kelas, Mapel, dan Jenis Penilaian</td>berguna';
                 return;
             }
             const siswaKelas = db.siswa.filter(s => s.Kelas === kelas);
@@ -1421,7 +1591,7 @@
                     <td class="text-center">${i + 1}</td>
                     <td class="font-medium">${s['Nama Siswa'] || s.Nama}</td>
                     <td class="text-center"><input type="number" class="input-nilai" value="${rec && rec.Nilai ? rec.Nilai : ""}" placeholder="0-100" min="0" max="100" step="1"></td>
-                </tr>`;
+                 </tr>`;
             }).join("");
         }
         
@@ -1429,33 +1599,330 @@
             const kelas = document.getElementById("penilaian-kelas").value;
             const mapel = document.getElementById("penilaian-mapel").value;
             const jenis = document.getElementById("penilaian-jenis").value;
-            if (!kelas || !mapel || !jenis) { 
-                Swal.fire("Peringatan", "Pilih kelas, mapel, dan jenis penilaian!", "warning"); 
-                return; 
-            }
+            if (!kelas || !mapel || !jenis) { Swal.fire("Peringatan", "Pilih kelas, mapel, dan jenis penilaian!", "warning"); return; }
             const records = [];
             document.querySelectorAll('#table-penilaian tr[data-id]').forEach(tr => {
                 const nilai = tr.querySelector(".input-nilai").value;
-                records.push({ 
-                    ID_Siswa: tr.dataset.id, 
-                    Nama_Siswa: tr.dataset.nama, 
-                    Nilai: nilai ? parseFloat(nilai) : "" 
-                });
+                records.push({ ID_Siswa: tr.dataset.id, Nama_Siswa: tr.dataset.nama, Nilai: nilai ? parseFloat(nilai) : "" });
             });
             if (await sendToServer("savePenilaian", { kelas, mapel, jenis, records, guru: db.config.Nama_Guru || "Guru" })) {
                 const tgl = new Date().toISOString().split("T")[0];
                 records.forEach(rec => {
                     const idx = db.nilai.findIndex(n => n.Kelas === kelas && n.Mapel === mapel && n.Jenis === jenis && String(n.ID_Siswa) === String(rec.ID_Siswa));
                     if (idx > -1) db.nilai[idx].Nilai = rec.Nilai;
-                    else db.nilai.push({ 
-                        Waktu: tgl, Jenis: jenis, Mapel: mapel, Kelas: kelas, 
-                        ID_Siswa: rec.ID_Siswa, "Nama Siswa": rec.Nama_Siswa, 
-                        Nilai: rec.Nilai, "Nama Guru": db.config.Nama_Guru || "Guru" 
-                    });
+                    else db.nilai.push({ Waktu: tgl, Jenis: jenis, Mapel: mapel, Kelas: kelas, ID_Siswa: rec.ID_Siswa, "Nama Siswa": rec.Nama_Siswa, Nilai: rec.Nilai, "Nama Guru": db.config.Nama_Guru || "Guru" });
                 });
                 updateDashboardStats();
                 Swal.fire("Berhasil", "Nilai tersimpan", "success");
             }
+        }
+        
+        // ============================================
+        // LAPORAN FUNCTIONS
+        // ============================================
+        
+        function tampilkanLaporanAbsensiSiswa(tipe) {
+            const kelas = document.getElementById("laporan-absensi-siswa-kelas").value;
+            const mapel = document.getElementById("laporan-absensi-siswa-mapel").value;
+            const bulan = document.getElementById("laporan-absensi-siswa-bulan").value;
+            if (!kelas || !mapel) { Swal.fire("Peringatan", "Pilih kelas dan mapel!", "warning"); return; }
+            let filtered = db.absensiSiswa.filter(a => a.Kelas === kelas && a.Mapel === mapel);
+            if (bulan !== "ALL") filtered = filtered.filter(a => a.Bulan === bulan);
+            const siswaList = db.siswa.filter(s => s.Kelas === kelas).map(s => s['Nama Siswa'] || s.Nama);
+            let html = "";
+            if (tipe === "rekap") {
+                html = `<thead> <tr><th>No</th><th>Nama Siswa</th><th>H</th><th>I</th><th>S</th><th>A</th><th>% Hadir</th></tr> </thead><tbody>`;
+                siswaList.forEach((nama, i) => {
+                    const absSiswa = filtered.filter(a => a['Nama Siswa'] === nama);
+                    let h = 0, iz = 0, s = 0, a = 0;
+                    absSiswa.forEach(abs => { const st = String(abs.Status).charAt(0).toUpperCase(); if (st === "H") h++; else if (st === "I") iz++; else if (st === "S") s++; else if (st === "A") a++; });
+                    const total = h + iz + s + a;
+                    html += `<tr><td class="text-center">${i + 1}</td><td>${nama}</td><td class="text-center font-bold">${h}</td><td class="text-center">${iz}</td><td class="text-center">${s}</td><td class="text-center">${a}</td><td class="text-center">${total > 0 ? Math.round((h / total) * 100) : 0}%</td></tr>`;
+                });
+            } else {
+                html = `<thead> <tr><th>Tanggal</th><th>Nama Siswa</th><th>Status</th></tr> </thead><tbody>`;
+                filtered.sort((a, b) => (b.Tanggal || b.Waktu).localeCompare(a.Tanggal || a.Waktu)).forEach(abs => {
+                    html += `<tr><td>${abs.Tanggal || abs.Waktu}</td><td>${abs['Nama Siswa']}</td><td class="text-center"><span class="px-2 py-1 rounded-full text-xs ${abs.Status === 'Hadir' ? 'bg-green-100 text-green-700' : abs.Status === 'Izin' ? 'bg-yellow-100 text-yellow-700' : abs.Status === 'Sakit' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700'}">${abs.Status}</span></td></tr>`;
+                });
+            }
+            document.getElementById("tabel-absensi-siswa-report").innerHTML = html;
+            document.getElementById("area-absensi-siswa").classList.remove("hidden");
+        }
+        
+        function tampilkanLaporanAbsensiGuru(tipe) {
+            const mapel = document.getElementById("laporan-absensi-guru-mapel").value;
+            const bulan = document.getElementById("laporan-absensi-guru-bulan").value;
+            let filtered = db.absensiGuru;
+            if (mapel && mapel !== "ALL") filtered = filtered.filter(a => a.Mapel === mapel);
+            if (bulan !== "ALL") filtered = filtered.filter(a => a.Bulan === bulan);
+            const guruList = db.guru;
+            let html = "";
+            if (tipe === "rekap") {
+                html = `<thead> <tr><th>No</th><th>NIP</th><th>Nama Guru</th><th>Mapel</th><th>H</th><th>I</th><th>S</th><th>A</th><th>% Hadir</th></tr> </thead><tbody>`;
+                guruList.forEach((guru, i) => {
+                    const absGuru = filtered.filter(a => a['Nama Guru'] === (guru['Nama Guru'] || guru.Nama));
+                    let h = 0, iz = 0, s = 0, a = 0;
+                    absGuru.forEach(abs => { const st = String(abs.Status).charAt(0).toUpperCase(); if (st === "H") h++; else if (st === "I") iz++; else if (st === "S") s++; else if (st === "A") a++; });
+                    const total = h + iz + s + a;
+                    html += `<tr><td class="text-center">${i + 1}</td><td>${guru.NIP || "-"}</td><td>${guru['Nama Guru'] || guru.Nama}</td><td>${guru.Mapel || "-"}</td><td class="text-center font-bold">${h}</td><td class="text-center">${iz}</td><td class="text-center">${s}</td><td class="text-center">${a}</td><td class="text-center">${total > 0 ? Math.round((h / total) * 100) : 0}%</td></tr>`;
+                });
+            } else {
+                html = `<thead> <tr><th>Tanggal</th><th>Nama Guru</th><th>NIP</th><th>Status</th></tr> </thead><tbody>`;
+                filtered.sort((a, b) => (b.Tanggal || b.Waktu).localeCompare(a.Tanggal || a.Waktu)).forEach(abs => {
+                    html += `<tr><td>${abs.Tanggal || abs.Waktu}</td><td>${abs['Nama Guru']}</td><td>${abs.NIP || "-"}</td><td class="text-center"><span class="px-2 py-1 rounded-full text-xs ${abs.Status === 'Hadir' ? 'bg-green-100 text-green-700' : abs.Status === 'Izin' ? 'bg-yellow-100 text-yellow-700' : abs.Status === 'Sakit' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700'}">${abs.Status}</span></td></tr>`;
+                });
+            }
+            document.getElementById("tabel-absensi-guru-report").innerHTML = html;
+            document.getElementById("area-absensi-guru").classList.remove("hidden");
+        }
+        
+        function tampilkanLaporanNilai(tipe) {
+            const kelas = document.getElementById("laporan-nilai-kelas").value;
+            const mapel = document.getElementById("laporan-nilai-mapel").value;
+            if (!kelas || !mapel) { Swal.fire("Peringatan", "Pilih kelas dan mapel!", "warning"); return; }
+            const siswaList = db.siswa.filter(s => s.Kelas === kelas).map(s => ({ id: s.ID || s.NISN, nama: s['Nama Siswa'] || s.Nama }));
+            const nilaiData = db.nilai.filter(n => n.Kelas === kelas && n.Mapel === mapel);
+            let html = "";
+            if (tipe === "leger") {
+                const jenisList = [...new Set(nilaiData.map(n => n.Jenis))].sort();
+                html = `<thead> <tr><th>No</th><th>Nama Siswa</th>${jenisList.map(j => `<th>${j}</th>`).join("")}<th>Rata-rata</th></tr> </thead><tbody>`;
+                siswaList.forEach((siswa, i) => {
+                    const nilaiSiswa = nilaiData.filter(n => String(n.ID_Siswa) === String(siswa.id));
+                    let total = 0, count = 0;
+                    html += `<tr><td class="text-center">${i + 1}</td><td>${siswa.nama}</td>`;
+                    jenisList.forEach(jenis => {
+                        const n = nilaiSiswa.find(n => n.Jenis === jenis);
+                        const val = n && n.Nilai ? parseFloat(n.Nilai) : 0;
+                        if (val > 0) { total += val; count++; }
+                        html += `<td class="text-center">${val || "-"}</td>`;
+                    });
+                    html += `<td class="text-center font-bold">${count > 0 ? (total / count).toFixed(1) : "0"}</td></tr>`;
+                });
+            } else {
+                html = `<thead> <tr><th>Tanggal</th><th>Jenis</th><th>Nama Siswa</th><th>Nilai</th></tr> </thead><tbody>`;
+                nilaiData.sort((a, b) => (b.Waktu || "").localeCompare(a.Waktu || "")).forEach(n => {
+                    html += `<tr><td>${n.Waktu || "-"}</td><td>${n.Jenis || "-"}</td><td>${n['Nama Siswa'] || "-"}</td><td class="text-center font-bold">${n.Nilai || "-"}</td></tr>`;
+                });
+            }
+            document.getElementById("tabel-nilai-report").innerHTML = html;
+            document.getElementById("area-nilai").classList.remove("hidden");
+        }
+        
+        function tampilkanLaporanPelanggaran() {
+            const kelas = document.getElementById("laporan-pelanggaran-kelas").value;
+            let filtered = db.pelanggaran;
+            if (kelas) filtered = filtered.filter(p => p.Kelas === kelas);
+            const html = `<thead> <tr><th>No</th><th>Siswa</th><th>Kelas</th><th>Pelanggaran</th><th>Poin</th><th>Tanggal</th><th>Keterangan</th></tr> </thead><tbody>` +
+                filtered.map((p, i) => `<tr><td class="text-center">${i + 1}</td><td>${p['Nama Siswa'] || "-"}</td><td>${p.Kelas || "-"}</td><td>${p.Pelanggaran || "-"}</td><td class="text-center font-bold">${p.Poin || 0}</td><td>${p.Tanggal || "-"}</td><td>${p.Keterangan || "-"}</td></tr>`).join("") +
+                `</tbody>`;
+            document.getElementById("tabel-pelanggaran-report").innerHTML = html;
+            document.getElementById("area-pelanggaran").classList.remove("hidden");
+        }
+        
+        // ============================================
+        // CETAK PDF FUNCTIONS
+        // ============================================
+        
+        async function getLogoBase64() {
+            const url = db.config.Logo_Kanan;
+            if (!url) return null;
+            if (cachedLogo) return cachedLogo;
+            try {
+                const res = await fetch(url);
+                const blob = await res.blob();
+                return new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => { cachedLogo = reader.result; resolve(reader.result); };
+                    reader.readAsDataURL(blob);
+                });
+            } catch (e) { return null; }
+        }
+        
+        async function cetakLaporanAbsensi(jenis) {
+            const { jsPDF } = window.jspdf;
+            Swal.fire({ title: "Membuat PDF...", didOpen: () => Swal.showLoading() });
+            try {
+                const doc = new jsPDF("p", "mm", "a4");
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const logo = await getLogoBase64();
+                if (logo) doc.addImage(logo, "PNG", 20, 10, 25, 25);
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(14);
+                doc.text((db.config.Pemerintah || "PEMERINTAH").toUpperCase(), pageWidth / 2, 15, { align: "center" });
+                doc.text("DINAS PENDIDIKAN", pageWidth / 2, 22, { align: "center" });
+                doc.setFontSize(16);
+                doc.text((db.config.Nama_Sekolah || "NAMA SEKOLAH").toUpperCase(), pageWidth / 2, 30, { align: "center" });
+                doc.setFontSize(14);
+                doc.text(jenis === "siswa" ? "LAPORAN ABSENSI SISWA" : "LAPORAN ABSENSI GURU", pageWidth / 2, 52, { align: "center" });
+                const tableId = jenis === "siswa" ? "tabel-absensi-siswa-report" : "tabel-absensi-guru-report";
+                doc.autoTable({ html: `#${tableId}`, startY: 70, theme: "grid", styles: { fontSize: 8, cellPadding: 3 }, headStyles: { fillColor: [30, 58, 138], textColor: 255 } });
+                const finalY = doc.lastAutoTable.finalY + 20;
+                const date = new Date();
+                const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+                const dateStr = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+                doc.text("Mengetahui,", 20, finalY);
+                doc.text("Kepala Sekolah", 20, finalY + 8);
+                doc.setFont("helvetica", "bold");
+                doc.text(db.config.Nama_Kepsek || "Kepala Sekolah", 20, finalY + 28);
+                doc.setFont("helvetica", "normal");
+                doc.text(`NIP. ${db.config.NIP_Kepsek || "-"}`, 20, finalY + 34);
+                doc.text(`${db.config.Tempat_Tanda_Tangan || "Kota"}, ${dateStr}`, pageWidth - 50, finalY, { align: "center" });
+                doc.text(jenis === "siswa" ? "Guru Mata Pelajaran" : "Kepala TU / Admin", pageWidth - 50, finalY + 8, { align: "center" });
+                doc.setFont("helvetica", "bold");
+                doc.text(db.config.Nama_Guru || "Guru", pageWidth - 50, finalY + 28, { align: "center" });
+                doc.setFont("helvetica", "normal");
+                doc.text(`NIP. ${db.config.NIP_Guru || "-"}`, pageWidth - 50, finalY + 34, { align: "center" });
+                doc.save(`Laporan_Absensi_${jenis === "siswa" ? "Siswa" : "Guru"}.pdf`);
+                Swal.close();
+            } catch (e) { Swal.close(); Swal.fire("Error", e.message, "error"); }
+        }
+        
+        async function cetakLaporanNilai() {
+            const { jsPDF } = window.jspdf;
+            Swal.fire({ title: "Membuat PDF...", didOpen: () => Swal.showLoading() });
+            try {
+                const doc = new jsPDF("p", "mm", "a4");
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const logo = await getLogoBase64();
+                if (logo) doc.addImage(logo, "PNG", 20, 10, 25, 25);
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(14);
+                doc.text((db.config.Pemerintah || "PEMERINTAH").toUpperCase(), pageWidth / 2, 15, { align: "center" });
+                doc.text("DINAS PENDIDIKAN", pageWidth / 2, 22, { align: "center" });
+                doc.setFontSize(16);
+                doc.text((db.config.Nama_Sekolah || "NAMA SEKOLAH").toUpperCase(), pageWidth / 2, 30, { align: "center" });
+                doc.setFontSize(14);
+                doc.text("LAPORAN NILAI SISWA", pageWidth / 2, 52, { align: "center" });
+                doc.autoTable({ html: "#tabel-nilai-report", startY: 70, theme: "grid", styles: { fontSize: 8, cellPadding: 3 }, headStyles: { fillColor: [30, 58, 138], textColor: 255 } });
+                const finalY = doc.lastAutoTable.finalY + 20;
+                const date = new Date();
+                const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+                const dateStr = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+                doc.text("Mengetahui,", 20, finalY);
+                doc.text("Kepala Sekolah", 20, finalY + 8);
+                doc.setFont("helvetica", "bold");
+                doc.text(db.config.Nama_Kepsek || "Kepala Sekolah", 20, finalY + 28);
+                doc.setFont("helvetica", "normal");
+                doc.text(`NIP. ${db.config.NIP_Kepsek || "-"}`, 20, finalY + 34);
+                doc.text(`${db.config.Tempat_Tanda_Tangan || "Kota"}, ${dateStr}`, pageWidth - 50, finalY, { align: "center" });
+                doc.text("Guru Mata Pelajaran", pageWidth - 50, finalY + 8, { align: "center" });
+                doc.setFont("helvetica", "bold");
+                doc.text(db.config.Nama_Guru || "Guru", pageWidth - 50, finalY + 28, { align: "center" });
+                doc.setFont("helvetica", "normal");
+                doc.text(`NIP. ${db.config.NIP_Guru || "-"}`, pageWidth - 50, finalY + 34, { align: "center" });
+                doc.save(`Laporan_Nilai.pdf`);
+                Swal.close();
+            } catch (e) { Swal.close(); Swal.fire("Error", e.message, "error"); }
+        }
+        
+        async function cetakLaporanPelanggaran() {
+            const { jsPDF } = window.jspdf;
+            Swal.fire({ title: "Membuat PDF...", didOpen: () => Swal.showLoading() });
+            try {
+                const doc = new jsPDF("p", "mm", "a4");
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const logo = await getLogoBase64();
+                if (logo) doc.addImage(logo, "PNG", 20, 10, 25, 25);
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(14);
+                doc.text((db.config.Pemerintah || "PEMERINTAH").toUpperCase(), pageWidth / 2, 15, { align: "center" });
+                doc.text("DINAS PENDIDIKAN", pageWidth / 2, 22, { align: "center" });
+                doc.setFontSize(16);
+                doc.text((db.config.Nama_Sekolah || "NAMA SEKOLAH").toUpperCase(), pageWidth / 2, 30, { align: "center" });
+                doc.setFontSize(14);
+                doc.text("LAPORAN PELANGGARAN SISWA", pageWidth / 2, 52, { align: "center" });
+                const kelas = document.getElementById("laporan-pelanggaran-kelas").value;
+                if (kelas) doc.text(`Kelas: ${kelas}`, 20, 65);
+                doc.autoTable({ html: "#tabel-pelanggaran-report", startY: 75, theme: "grid", styles: { fontSize: 8, cellPadding: 3 }, headStyles: { fillColor: [30, 58, 138], textColor: 255 } });
+                const finalY = doc.lastAutoTable.finalY + 20;
+                const date = new Date();
+                const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+                const dateStr = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+                doc.text("Mengetahui,", 20, finalY);
+                doc.text("Kepala Sekolah", 20, finalY + 8);
+                doc.setFont("helvetica", "bold");
+                doc.text(db.config.Nama_Kepsek || "Kepala Sekolah", 20, finalY + 28);
+                doc.setFont("helvetica", "normal");
+                doc.text(`NIP. ${db.config.NIP_Kepsek || "-"}`, 20, finalY + 34);
+                doc.text(`${db.config.Tempat_Tanda_Tangan || "Kota"}, ${dateStr}`, pageWidth - 50, finalY, { align: "center" });
+                doc.text("Guru BK / Wali Kelas", pageWidth - 50, finalY + 8, { align: "center" });
+                doc.setFont("helvetica", "bold");
+                doc.text(db.config.Nama_Guru || "Guru", pageWidth - 50, finalY + 28, { align: "center" });
+                doc.setFont("helvetica", "normal");
+                doc.text(`NIP. ${db.config.NIP_Guru || "-"}`, pageWidth - 50, finalY + 34, { align: "center" });
+                doc.save(`Laporan_Pelanggaran_${kelas || "Semua"}.pdf`);
+                Swal.close();
+            } catch (e) { Swal.close(); Swal.fire("Error", e.message, "error"); }
+        }
+        
+        function cetakJurnalAgenda() {
+            const { jsPDF } = window.jspdf;
+            Swal.fire({ title: "Membuat PDF...", didOpen: () => Swal.showLoading() });
+            setTimeout(async () => {
+                try {
+                    const doc = new jsPDF("p", "mm", "a4");
+                    const pageWidth = doc.internal.pageSize.getWidth();
+                    const logo = await getLogoBase64();
+                    if (logo) doc.addImage(logo, "PNG", 20, 10, 25, 25);
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(14);
+                    doc.text((db.config.Pemerintah || "PEMERINTAH").toUpperCase(), pageWidth / 2, 15, { align: "center" });
+                    doc.text("DINAS PENDIDIKAN", pageWidth / 2, 22, { align: "center" });
+                    doc.setFontSize(16);
+                    doc.text((db.config.Nama_Sekolah || "NAMA SEKOLAH").toUpperCase(), pageWidth / 2, 30, { align: "center" });
+                    doc.setFontSize(14);
+                    doc.text("JURNAL AGENDA MENGAJAR", pageWidth / 2, 52, { align: "center" });
+                    doc.setFontSize(10);
+                    doc.text(`Guru: ${db.config.Nama_Guru || "Guru"}`, 20, 62);
+                    const tableData = db.agenda.map(a => [a.Tanggal || "-", a.Jam || "-", a.Kelas || "-", a.Mapel || "-", a.Materi || "-", a.Status || "-", a['Absen Siswa'] || "-", a.Ket || "-"]);
+                    doc.autoTable({ head: [["Tanggal", "Jam", "Kelas", "Mapel", "Materi", "Status", "Absen", "Keterangan"]], body: tableData, startY: 70, theme: "grid", styles: { fontSize: 7, cellPadding: 2 }, headStyles: { fillColor: [30, 58, 138], textColor: 255 } });
+                    doc.save(`Jurnal_Agenda_${db.config.Nama_Guru || "Guru"}.pdf`);
+                    Swal.close();
+                } catch (e) { Swal.close(); Swal.fire("Error", e.message, "error"); }
+            }, 500);
+        }
+        
+        function cetakLaporanBimbingan() {
+            const { jsPDF } = window.jspdf;
+            Swal.fire({ title: "Membuat PDF...", didOpen: () => Swal.showLoading() });
+            setTimeout(async () => {
+                try {
+                    const doc = new jsPDF("p", "mm", "a4");
+                    const pageWidth = doc.internal.pageSize.getWidth();
+                    const logo = await getLogoBase64();
+                    if (logo) doc.addImage(logo, "PNG", 20, 10, 25, 25);
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(14);
+                    doc.text((db.config.Pemerintah || "PEMERINTAH").toUpperCase(), pageWidth / 2, 15, { align: "center" });
+                    doc.text("DINAS PENDIDIKAN", pageWidth / 2, 22, { align: "center" });
+                    doc.setFontSize(16);
+                    doc.text((db.config.Nama_Sekolah || "NAMA SEKOLAH").toUpperCase(), pageWidth / 2, 30, { align: "center" });
+                    doc.setFontSize(14);
+                    doc.text("LAPORAN BIMBINGAN KONSELING", pageWidth / 2, 52, { align: "center" });
+                    doc.setFontSize(10);
+                    doc.text(`Guru Wali: ${db.config.Nama_Guru || "Guru"}`, 20, 62);
+                    const tableData = db.bimbingan.map(b => [b.Tanggal || "-", b['Nama Siswa'] || "-", b.Kelas || "-", b.Jenis || "-", b.Kasus || "-", b['Tindak Lanjut'] || "-"]);
+                    doc.autoTable({ head: [["Tanggal", "Siswa", "Kelas", "Jenis Masalah", "Kasus", "Tindak Lanjut"]], body: tableData, startY: 70, theme: "grid", styles: { fontSize: 8, cellPadding: 3 }, headStyles: { fillColor: [30, 58, 138], textColor: 255 } });
+                    const finalY = doc.lastAutoTable.finalY + 20;
+                    const date = new Date();
+                    const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+                    const dateStr = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+                    doc.text("Mengetahui,", 20, finalY);
+                    doc.text("Kepala Sekolah", 20, finalY + 8);
+                    doc.setFont("helvetica", "bold");
+                    doc.text(db.config.Nama_Kepsek || "Kepala Sekolah", 20, finalY + 28);
+                    doc.setFont("helvetica", "normal");
+                    doc.text(`NIP. ${db.config.NIP_Kepsek || "-"}`, 20, finalY + 34);
+                    doc.text(`${db.config.Tempat_Tanda_Tangan || "Kota"}, ${dateStr}`, pageWidth - 50, finalY, { align: "center" });
+                    doc.text("Guru Wali", pageWidth - 50, finalY + 8, { align: "center" });
+                    doc.setFont("helvetica", "bold");
+                    doc.text(db.config.Nama_Guru || "Guru", pageWidth - 50, finalY + 28, { align: "center" });
+                    doc.setFont("helvetica", "normal");
+                    doc.text(`NIP. ${db.config.NIP_Guru || "-"}`, pageWidth - 50, finalY + 34, { align: "center" });
+                    doc.save(`Laporan_Bimbingan_${db.config.Nama_Guru || "Guru"}.pdf`);
+                    Swal.close();
+                } catch (e) { Swal.close(); Swal.fire("Error", e.message, "error"); }
+            }, 500);
         }
         
         // ============================================
@@ -1476,10 +1943,7 @@
         function previewKartu() {
             const jenis = document.getElementById("kartu-jenis").value;
             const selected = document.getElementById("kartu-kelas").value;
-            if (!selected) { 
-                Swal.fire("Peringatan", "Pilih data terlebih dahulu!", "warning"); 
-                return; 
-            }
+            if (!selected) { Swal.fire("Peringatan", "Pilih data terlebih dahulu!", "warning"); return; }
             const previewDiv = document.getElementById("preview-kartu");
             if (jenis === "siswa") {
                 const siswa = db.siswa.find(s => s.Kelas === selected) || db.siswa[0];
@@ -1586,233 +2050,6 @@
         }
         
         // ============================================
-        // CETAK PDF FUNCTIONS
-        // ============================================
-        
-        async function getLogoBase64() {
-            const url = db.config.Logo_Kanan;
-            if (!url) return null;
-            if (cachedLogo) return cachedLogo;
-            try {
-                const res = await fetch(url);
-                const blob = await res.blob();
-                return new Promise(resolve => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => { cachedLogo = reader.result; resolve(reader.result); };
-                    reader.readAsDataURL(blob);
-                });
-            } catch (e) { return null; }
-        }
-        
-        async function cetakLaporanAbsensi(jenis) {
-            const { jsPDF } = window.jspdf;
-            Swal.fire({ title: "Membuat PDF...", didOpen: () => Swal.showLoading() });
-            try {
-                const doc = new jsPDF("p", "mm", "a4");
-                const pageWidth = doc.internal.pageSize.getWidth();
-                const logo = await getLogoBase64();
-                if (logo) doc.addImage(logo, "PNG", 20, 10, 25, 25);
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(14);
-                doc.text((db.config.Pemerintah || "PEMERINTAH").toUpperCase(), pageWidth / 2, 15, { align: "center" });
-                doc.text("DINAS PENDIDIKAN", pageWidth / 2, 22, { align: "center" });
-                doc.setFontSize(16);
-                doc.text((db.config.Nama_Sekolah || "NAMA SEKOLAH").toUpperCase(), pageWidth / 2, 30, { align: "center" });
-                doc.setFontSize(14);
-                doc.text(jenis === "siswa" ? "LAPORAN ABSENSI SISWA" : "LAPORAN ABSENSI GURU", pageWidth / 2, 52, { align: "center" });
-                const tableId = jenis === "siswa" ? "tabel-absensi-siswa" : "tabel-absensi-guru";
-                doc.autoTable({ html: `#${tableId}`, startY: 70, theme: "grid", styles: { fontSize: 8, cellPadding: 3 }, headStyles: { fillColor: [30, 58, 138], textColor: 255 } });
-                const finalY = doc.lastAutoTable.finalY + 20;
-                const date = new Date();
-                const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-                const dateStr = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-                doc.text("Mengetahui,", 20, finalY);
-                doc.text("Kepala Sekolah", 20, finalY + 8);
-                doc.setFont("helvetica", "bold");
-                doc.text(db.config.Nama_Kepsek || "Kepala Sekolah", 20, finalY + 28);
-                doc.setFont("helvetica", "normal");
-                doc.text(`NIP. ${db.config.NIP_Kepsek || "-"}`, 20, finalY + 34);
-                doc.text(`${db.config.Tempat_Tanda_Tangan || "Kota"}, ${dateStr}`, pageWidth - 50, finalY, { align: "center" });
-                doc.text(jenis === "siswa" ? "Guru Mata Pelajaran" : "Kepala TU / Admin", pageWidth - 50, finalY + 8, { align: "center" });
-                doc.setFont("helvetica", "bold");
-                doc.text(db.config.Nama_Guru || "Guru", pageWidth - 50, finalY + 28, { align: "center" });
-                doc.setFont("helvetica", "normal");
-                doc.text(`NIP. ${db.config.NIP_Guru || "-"}`, pageWidth - 50, finalY + 34, { align: "center" });
-                doc.save(`Laporan_Absensi_${jenis === "siswa" ? "Siswa" : "Guru"}.pdf`);
-                Swal.close();
-            } catch (e) { Swal.close(); Swal.fire("Error", e.message, "error"); }
-        }
-        
-        async function cetakLaporanNilai() {
-            const { jsPDF } = window.jspdf;
-            Swal.fire({ title: "Membuat PDF...", didOpen: () => Swal.showLoading() });
-            try {
-                const doc = new jsPDF("p", "mm", "a4");
-                const pageWidth = doc.internal.pageSize.getWidth();
-                const logo = await getLogoBase64();
-                if (logo) doc.addImage(logo, "PNG", 20, 10, 25, 25);
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(14);
-                doc.text((db.config.Pemerintah || "PEMERINTAH").toUpperCase(), pageWidth / 2, 15, { align: "center" });
-                doc.text("DINAS PENDIDIKAN", pageWidth / 2, 22, { align: "center" });
-                doc.setFontSize(16);
-                doc.text((db.config.Nama_Sekolah || "NAMA SEKOLAH").toUpperCase(), pageWidth / 2, 30, { align: "center" });
-                doc.setFontSize(14);
-                doc.text("LAPORAN NILAI SISWA", pageWidth / 2, 52, { align: "center" });
-                doc.autoTable({ html: "#tabel-nilai", startY: 70, theme: "grid", styles: { fontSize: 8, cellPadding: 3 }, headStyles: { fillColor: [30, 58, 138], textColor: 255 } });
-                const finalY = doc.lastAutoTable.finalY + 20;
-                const date = new Date();
-                const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-                const dateStr = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-                doc.text("Mengetahui,", 20, finalY);
-                doc.text("Kepala Sekolah", 20, finalY + 8);
-                doc.setFont("helvetica", "bold");
-                doc.text(db.config.Nama_Kepsek || "Kepala Sekolah", 20, finalY + 28);
-                doc.setFont("helvetica", "normal");
-                doc.text(`NIP. ${db.config.NIP_Kepsek || "-"}`, 20, finalY + 34);
-                doc.text(`${db.config.Tempat_Tanda_Tangan || "Kota"}, ${dateStr}`, pageWidth - 50, finalY, { align: "center" });
-                doc.text("Guru Mata Pelajaran", pageWidth - 50, finalY + 8, { align: "center" });
-                doc.setFont("helvetica", "bold");
-                doc.text(db.config.Nama_Guru || "Guru", pageWidth - 50, finalY + 28, { align: "center" });
-                doc.setFont("helvetica", "normal");
-                doc.text(`NIP. ${db.config.NIP_Guru || "-"}`, pageWidth - 50, finalY + 34, { align: "center" });
-                doc.save(`Laporan_Nilai.pdf`);
-                Swal.close();
-            } catch (e) { Swal.close(); Swal.fire("Error", e.message, "error"); }
-        }
-        
-        function tampilkanLaporanPelanggaran() {
-            const kelas = document.getElementById("laporan-pelanggaran-kelas").value;
-            let filtered = db.pelanggaran;
-            if (kelas) filtered = filtered.filter(p => p.Kelas === kelas);
-            const html = `<thead> 习<th>No</th><th>Siswa</th><th>Kelas</th><th>Pelanggaran</th><th>Poin</th><th>Tanggal</th><th>Keterangan</th> </thead><tbody>` +
-                filtered.map((p, i) => `<tr><td class="text-center">${i + 1}</td><td>${p['Nama Siswa'] || "-"}</td><td>${p.Kelas || "-"}</td><td>${p.Pelanggaran || "-"}</td><td class="text-center font-bold">${p.Poin || 0}</td><td>${p.Tanggal || "-"}</td><td>${p.Keterangan || "-"}</td></tr>`).join("") +
-                `</tbody>`;
-            document.getElementById("tabel-pelanggaran").innerHTML = html;
-            document.getElementById("area-pelanggaran").classList.remove("hidden");
-        }
-        
-        async function cetakLaporanPelanggaran() {
-            const { jsPDF } = window.jspdf;
-            Swal.fire({ title: "Membuat PDF...", didOpen: () => Swal.showLoading() });
-            try {
-                const doc = new jsPDF("p", "mm", "a4");
-                const pageWidth = doc.internal.pageSize.getWidth();
-                const logo = await getLogoBase64();
-                if (logo) doc.addImage(logo, "PNG", 20, 10, 25, 25);
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(14);
-                doc.text((db.config.Pemerintah || "PEMERINTAH").toUpperCase(), pageWidth / 2, 15, { align: "center" });
-                doc.text("DINAS PENDIDIKAN", pageWidth / 2, 22, { align: "center" });
-                doc.setFontSize(16);
-                doc.text((db.config.Nama_Sekolah || "NAMA SEKOLAH").toUpperCase(), pageWidth / 2, 30, { align: "center" });
-                doc.setFontSize(14);
-                doc.text("LAPORAN PELANGGARAN SISWA", pageWidth / 2, 52, { align: "center" });
-                const kelas = document.getElementById("laporan-pelanggaran-kelas").value;
-                if (kelas) doc.text(`Kelas: ${kelas}`, 20, 65);
-                doc.autoTable({ html: "#tabel-pelanggaran", startY: 75, theme: "grid", styles: { fontSize: 8, cellPadding: 3 }, headStyles: { fillColor: [30, 58, 138], textColor: 255 } });
-                const finalY = doc.lastAutoTable.finalY + 20;
-                const date = new Date();
-                const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-                const dateStr = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-                doc.text("Mengetahui,", 20, finalY);
-                doc.text("Kepala Sekolah", 20, finalY + 8);
-                doc.setFont("helvetica", "bold");
-                doc.text(db.config.Nama_Kepsek || "Kepala Sekolah", 20, finalY + 28);
-                doc.setFont("helvetica", "normal");
-                doc.text(`NIP. ${db.config.NIP_Kepsek || "-"}`, 20, finalY + 34);
-                doc.text(`${db.config.Tempat_Tanda_Tangan || "Kota"}, ${dateStr}`, pageWidth - 50, finalY, { align: "center" });
-                doc.text("Guru BK / Wali Kelas", pageWidth - 50, finalY + 8, { align: "center" });
-                doc.setFont("helvetica", "bold");
-                doc.text(db.config.Nama_Guru || "Guru", pageWidth - 50, finalY + 28, { align: "center" });
-                doc.setFont("helvetica", "normal");
-                doc.text(`NIP. ${db.config.NIP_Guru || "-"}`, pageWidth - 50, finalY + 34, { align: "center" });
-                doc.save(`Laporan_Pelanggaran_${kelas || "Semua"}.pdf`);
-                Swal.close();
-            } catch (e) { Swal.close(); Swal.fire("Error", e.message, "error"); }
-        }
-        
-        function cetakJurnalAgenda() {
-            const { jsPDF } = window.jspdf;
-            Swal.fire({ title: "Membuat PDF...", didOpen: () => Swal.showLoading() });
-            setTimeout(async () => {
-                try {
-                    const doc = new jsPDF("p", "mm", "a4");
-                    const pageWidth = doc.internal.pageSize.getWidth();
-                    const logo = await getLogoBase64();
-                    if (logo) doc.addImage(logo, "PNG", 20, 10, 25, 25);
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(14);
-                    doc.text((db.config.Pemerintah || "PEMERINTAH").toUpperCase(), pageWidth / 2, 15, { align: "center" });
-                    doc.text("DINAS PENDIDIKAN", pageWidth / 2, 22, { align: "center" });
-                    doc.setFontSize(16);
-                    doc.text((db.config.Nama_Sekolah || "NAMA SEKOLAH").toUpperCase(), pageWidth / 2, 30, { align: "center" });
-                    doc.setFontSize(14);
-                    doc.text("JURNAL AGENDA MENGAJAR", pageWidth / 2, 52, { align: "center" });
-                    doc.setFontSize(10);
-                    doc.text(`Guru: ${db.config.Nama_Guru || "Guru"}`, 20, 62);
-                    const tableData = db.agenda.map(a => [a.Tanggal || "-", a.Jam || "-", a.Kelas || "-", a.Mapel || "-", a.Materi || "-", a.Status || "-", a['Absen Siswa'] || "-", a.Ket || "-"]);
-                    doc.autoTable({ 
-                        head: [["Tanggal", "Jam", "Kelas", "Mapel", "Materi", "Status", "Absen", "Keterangan"]], 
-                        body: tableData, startY: 70, theme: "grid", 
-                        styles: { fontSize: 7, cellPadding: 2 }, 
-                        headStyles: { fillColor: [30, 58, 138], textColor: 255 } 
-                    });
-                    doc.save(`Jurnal_Agenda_${db.config.Nama_Guru || "Guru"}.pdf`);
-                    Swal.close();
-                } catch (e) { Swal.close(); Swal.fire("Error", e.message, "error"); }
-            }, 500);
-        }
-        
-        function cetakLaporanBimbingan() {
-            const { jsPDF } = window.jspdf;
-            Swal.fire({ title: "Membuat PDF...", didOpen: () => Swal.showLoading() });
-            setTimeout(async () => {
-                try {
-                    const doc = new jsPDF("p", "mm", "a4");
-                    const pageWidth = doc.internal.pageSize.getWidth();
-                    const logo = await getLogoBase64();
-                    if (logo) doc.addImage(logo, "PNG", 20, 10, 25, 25);
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(14);
-                    doc.text((db.config.Pemerintah || "PEMERINTAH").toUpperCase(), pageWidth / 2, 15, { align: "center" });
-                    doc.text("DINAS PENDIDIKAN", pageWidth / 2, 22, { align: "center" });
-                    doc.setFontSize(16);
-                    doc.text((db.config.Nama_Sekolah || "NAMA SEKOLAH").toUpperCase(), pageWidth / 2, 30, { align: "center" });
-                    doc.setFontSize(14);
-                    doc.text("LAPORAN BIMBINGAN KONSELING", pageWidth / 2, 52, { align: "center" });
-                    doc.setFontSize(10);
-                    doc.text(`Guru Wali: ${db.config.Nama_Guru || "Guru"}`, 20, 62);
-                    const tableData = db.bimbingan.map(b => [b.Tanggal || "-", b['Nama Siswa'] || "-", b.Kelas || "-", b.Jenis || "-", b.Kasus || "-", b['Tindak Lanjut'] || "-"]);
-                    doc.autoTable({ 
-                        head: [["Tanggal", "Siswa", "Kelas", "Jenis Masalah", "Kasus", "Tindak Lanjut"]], 
-                        body: tableData, startY: 70, theme: "grid", 
-                        styles: { fontSize: 8, cellPadding: 3 }, 
-                        headStyles: { fillColor: [30, 58, 138], textColor: 255 } 
-                    });
-                    const finalY = doc.lastAutoTable.finalY + 20;
-                    const date = new Date();
-                    const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-                    const dateStr = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-                    doc.text("Mengetahui,", 20, finalY);
-                    doc.text("Kepala Sekolah", 20, finalY + 8);
-                    doc.setFont("helvetica", "bold");
-                    doc.text(db.config.Nama_Kepsek || "Kepala Sekolah", 20, finalY + 28);
-                    doc.setFont("helvetica", "normal");
-                    doc.text(`NIP. ${db.config.NIP_Kepsek || "-"}`, 20, finalY + 34);
-                    doc.text(`${db.config.Tempat_Tanda_Tangan || "Kota"}, ${dateStr}`, pageWidth - 50, finalY, { align: "center" });
-                    doc.text("Guru Wali", pageWidth - 50, finalY + 8, { align: "center" });
-                    doc.setFont("helvetica", "bold");
-                    doc.text(db.config.Nama_Guru || "Guru", pageWidth - 50, finalY + 28, { align: "center" });
-                    doc.setFont("helvetica", "normal");
-                    doc.text(`NIP. ${db.config.NIP_Guru || "-"}`, pageWidth - 50, finalY + 34, { align: "center" });
-                    doc.save(`Laporan_Bimbingan_${db.config.Nama_Guru || "Guru"}.pdf`);
-                    Swal.close();
-                } catch (e) { Swal.close(); Swal.fire("Error", e.message, "error"); }
-            }, 500);
-        }
-        
-        // ============================================
         // IMPORT/EXPORT FUNCTIONS
         // ============================================
         
@@ -1889,8 +2126,124 @@
         }
         
         // ============================================
-        // PENGATURAN FUNCTIONS
+        // REFRESH FUNCTIONS
         // ============================================
+        
+        function refreshAllSelectors() {
+            const kelasSet = [...new Set(db.siswa.map(s => s.Kelas))].sort();
+            const kelasHtml = `<option value="">Pilih Kelas</option>${kelasSet.map(k => `<option value="${k}">${k}</option>`).join("")}`;
+            ["absensi-siswa-kelas", "penilaian-kelas", "jadwal-kelas", "laporan-absensi-siswa-kelas", "laporan-nilai-kelas", "agenda-kelas", "laporan-pelanggaran-kelas"].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = kelasHtml;
+            });
+            
+            const mapelHtml = `<option value="">Pilih Mapel</option>${db.mapel.map(m => `<option value="${m['Nama Mapel']}">${m['Nama Mapel']}</option>`).join("")}`;
+            ["absensi-siswa-mapel", "penilaian-mapel", "jadwal-mapel", "laporan-absensi-siswa-mapel", "laporan-nilai-mapel", "agenda-mapel", "laporan-absensi-guru-mapel"].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = mapelHtml;
+            });
+            
+            const siswaHtml = `<option value="">Pilih Siswa</option>${db.siswa.map(s => `<option value="${s['Nama Siswa'] || s.Nama}" data-kelas="${s.Kelas}">${s['Nama Siswa'] || s.Nama} (${s.Kelas})</option>`).join("")}`;
+            const pelanggaranSiswa = document.getElementById("pelanggaran-siswa");
+            if (pelanggaranSiswa) pelanggaranSiswa.innerHTML = siswaHtml;
+            
+            const bimbinganHtml = `<option value="">Pilih Siswa</option>${db.siswaBimbingan.map(s => `<option value="${s['Nama Siswa']}" data-kelas="${s.Kelas}">${s['Nama Siswa']} (${s.Kelas})</option>`).join("")}`;
+            const bimbinganSel = document.getElementById("bimbingan-siswa");
+            if (bimbinganSel) bimbinganSel.innerHTML = bimbinganHtml;
+            
+            toggleKartuJenis();
+        }
+        
+        function refreshAllTables() {
+            renderSiswa();
+            renderGuru();
+            renderMapel();
+            renderPelanggaran();
+            renderJadwal();
+            renderAgenda();
+            renderBimbingan();
+            loadAbsensiSiswaList();
+            loadAbsensiGuruList();
+        }
+        
+        function updateDashboardStats() {
+            document.getElementById("stat-siswa").innerText = db.siswa.length;
+            document.getElementById("stat-guru").innerText = db.guru.length;
+            document.getElementById("stat-mapel").innerText = db.mapel.length;
+            const totalPoin = db.pelanggaran.reduce((sum, p) => sum + (parseInt(p.Poin) || 0), 0);
+            document.getElementById("stat-pelanggaran").innerText = totalPoin;
+            
+            const today = new Date().toISOString().split("T")[0];
+            const todayAbsSiswa = db.absensiSiswa.filter(a => a.Tanggal === today || a.Waktu === today);
+            if (todayAbsSiswa.length > 0) {
+                const hadir = todayAbsSiswa.filter(a => a.Status === "Hadir" || a.Status === "H").length;
+                document.getElementById("stat-hadir-siswa").innerText = Math.round((hadir / todayAbsSiswa.length) * 100) + "%";
+            } else document.getElementById("stat-hadir-siswa").innerText = "0%";
+            
+            const todayAbsGuru = db.absensiGuru.filter(a => a.Tanggal === today || a.Waktu === today);
+            if (todayAbsGuru.length > 0) {
+                const hadir = todayAbsGuru.filter(a => a.Status === "Hadir" || a.Status === "H").length;
+                document.getElementById("stat-hadir-guru").innerText = Math.round((hadir / todayAbsGuru.length) * 100) + "%";
+            } else document.getElementById("stat-hadir-guru").innerText = "0%";
+            
+            updateCharts();
+        }
+        
+        function updateCharts() {
+            const last7Days = Array.from({ length: 7 }, (_, i) => { const d = new Date(); d.setDate(d.getDate() - (6 - i)); return d.toISOString().split("T")[0]; });
+            
+            // Chart kehadiran siswa
+            const kehadiranSiswaData = last7Days.map(tgl => {
+                const abs = db.absensiSiswa.filter(a => a.Tanggal === tgl || a.Waktu === tgl);
+                if (abs.length === 0) return 0;
+                const hadir = abs.filter(a => a.Status === "Hadir" || a.Status === "H").length;
+                return Math.round((hadir / abs.length) * 100);
+            });
+            const ctxSiswa = document.getElementById("chart-kehadiran-siswa")?.getContext("2d");
+            if (ctxSiswa) {
+                if (chartKehadiranSiswa) chartKehadiranSiswa.destroy();
+                chartKehadiranSiswa = new Chart(ctxSiswa, {
+                    type: "bar",
+                    data: { labels: last7Days.map(d => d.substring(5)), datasets: [{ label: "Kehadiran Siswa (%)", data: kehadiranSiswaData, backgroundColor: "#1e3a8a", borderRadius: 8 }] },
+                    options: { responsive: true, maintainAspectRatio: true }
+                });
+            }
+            
+            // Chart kehadiran guru
+            const kehadiranGuruData = last7Days.map(tgl => {
+                const abs = db.absensiGuru.filter(a => a.Tanggal === tgl || a.Waktu === tgl);
+                if (abs.length === 0) return 0;
+                const hadir = abs.filter(a => a.Status === "Hadir" || a.Status === "H").length;
+                return Math.round((hadir / abs.length) * 100);
+            });
+            const ctxGuru = document.getElementById("chart-kehadiran-guru")?.getContext("2d");
+            if (ctxGuru) {
+                if (chartKehadiranGuru) chartKehadiranGuru.destroy();
+                chartKehadiranGuru = new Chart(ctxGuru, {
+                    type: "bar",
+                    data: { labels: last7Days.map(d => d.substring(5)), datasets: [{ label: "Kehadiran Guru (%)", data: kehadiranGuruData, backgroundColor: "#10b981", borderRadius: 8 }] },
+                    options: { responsive: true, maintainAspectRatio: true }
+                });
+            }
+            
+            // Chart nilai
+            const mapelList = [...new Set(db.nilai.map(n => n.Mapel))];
+            const nilaiRata = mapelList.map(mpl => {
+                const nilaiMpl = db.nilai.filter(n => n.Mapel === mpl && n.Nilai);
+                if (nilaiMpl.length === 0) return 0;
+                const total = nilaiMpl.reduce((s, n) => s + (parseFloat(n.Nilai) || 0), 0);
+                return Math.round(total / nilaiMpl.length);
+            });
+            const ctxNilai = document.getElementById("chart-nilai")?.getContext("2d");
+            if (ctxNilai) {
+                if (chartNilai) chartNilai.destroy();
+                chartNilai = new Chart(ctxNilai, {
+                    type: "line",
+                    data: { labels: mapelList.length ? mapelList : ["Data"], datasets: [{ label: "Rata-rata Nilai", data: nilaiRata.length ? nilaiRata : [0], borderColor: "#f59e0b", backgroundColor: "rgba(245,158,11,0.1)", tension: 0.4, fill: true }] },
+                    options: { responsive: true, maintainAspectRatio: true }
+                });
+            }
+        }
         
         function applyConfigToForm() {
             document.getElementById("conf-nama-guru").value = db.config.Nama_Guru || "";
