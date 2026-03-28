@@ -13,7 +13,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs2-fix/qrcode.min.js"></script>
     
     <style>
@@ -38,12 +37,6 @@
         .dark #loading-overlay { background: rgba(17,24,39,0.98); }
         .tab-btn { padding: 8px 16px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
         .tab-btn.active { background: #1e3a8a !important; color: white !important; }
-        .video-container { position: relative; width: 100%; max-width: 500px; margin: 0 auto; border-radius: 16px; overflow: hidden; background: #000; }
-        .video-container.fullscreen { position: fixed; top: 0; left: 0; right: 0; bottom: 0; max-width: 100%; width: 100%; height: 100%; z-index: 9999; border-radius: 0; }
-        .video-container.fullscreen video { height: 100%; object-fit: cover; }
-        video { width: 100%; height: auto; display: block; }
-        canvas { display: none; }
-        .fullscreen-btn { position: absolute; bottom: 20px; right: 20px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 24px; cursor: pointer; z-index: 10; }
         .poin-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
         .poin-rendah { background: #dcfce7; color: #166534; }
         .poin-sedang { background: #fef9c3; color: #854d0e; }
@@ -53,6 +46,9 @@
         .absensi-tab-btn.active { background: #1e3a8a; color: white; }
         .dark .absensi-tab-btn { background: #1f2937; }
         .dark .absensi-tab-btn.active { background: #3b82f6; }
+        .toast-success { background: #10b981; color: white; padding: 12px 20px; border-radius: 8px; position: fixed; bottom: 20px; right: 20px; z-index: 10000; animation: slideIn 0.3s; }
+        .toast-error { background: #ef4444; color: white; padding: 12px 20px; border-radius: 8px; position: fixed; bottom: 20px; right: 20px; z-index: 10000; animation: slideIn 0.3s; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     </style>
     
     <script>
@@ -65,7 +61,7 @@
 <body class="text-gray-800 dark:bg-gray-900 dark:text-gray-100">
     
     <!-- Loading Overlay -->
-    <div id="loading-overlay">
+    <div id="loading-overlay" style="display: none;">
         <i class="fa-solid fa-spinner fa-spin text-5xl text-school-main mb-4"></i>
         <h2 class="text-xl font-bold" id="loading-title">Menyinkronkan Data...</h2>
         <p class="text-gray-500 mt-2" id="loading-desc">Menghubungi server...</p>
@@ -158,7 +154,7 @@
                             <input type="text" id="kelas-siswa" placeholder="Kelas" class="px-3 py-2 border rounded-lg dark:bg-gray-800" required>
                             <button type="submit" class="bg-school-main text-white px-4 py-2 rounded-lg">Tambah Siswa</button>
                         </form>
-                        <div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th width="5%">No</th><th>NISN</th><th>Nama Lengkap</th><th>Kelas</th><th width="15%">Aksi</th></tr> </thead><tbody id="table-siswa"></tbody> </table></div>
+                        <div class="overflow-x-auto"><table class="admin-table"><thead><tr><th width="5%">No</th><th>NISN</th><th>Nama Lengkap</th><th>Kelas</th><th width="15%">Aksi</th></tr></thead><tbody id="table-siswa"></tbody></table></div>
                     </div>
                 </div>
                 
@@ -180,7 +176,7 @@
                             <input type="text" id="mapel-guru" placeholder="Mata Pelajaran" class="px-3 py-2 border rounded-lg dark:bg-gray-800" required>
                             <button type="submit" class="bg-school-main text-white px-4 py-2 rounded-lg">Tambah Guru</button>
                         </form>
-                        <div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th width="5%">No</th><th>NIP</th><th>Nama Lengkap</th><th>Mapel</th><th width="15%">Aksi</th></tr> </thead><tbody id="table-guru"></tbody> </table></div>
+                        <div class="overflow-x-auto"><table class="admin-table"><thead><tr><th width="5%">No</th><th>NIP</th><th>Nama Lengkap</th><th>Mapel</th><th width="15%">Aksi</th></tr></thead><tbody id="table-guru"></tbody></table></div>
                     </div>
                 </div>
                 
@@ -195,7 +191,7 @@
                             <input type="text" id="tahun-ajaran" placeholder="Tahun Ajaran" class="px-3 py-2 border rounded-lg dark:bg-gray-800" required>
                             <button type="submit" class="bg-school-main text-white px-4 py-2 rounded-lg">Tambah Mapel</button>
                         </form>
-                        <div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th width="5%">No</th><th>Mapel</th><th>Semester</th><th>Tahun Ajaran</th><th width="15%">Aksi</th></tr> </thead><tbody id="table-mapel"></tbody> </table></div>
+                        <div class="overflow-x-auto"><table class="admin-table"><thead><tr><th width="5%">No</th><th>Mapel</th><th>Semester</th><th>Tahun Ajaran</th><th width="15%">Aksi</th></tr></thead><tbody id="table-mapel"></tbody></table></div>
                     </div>
                 </div>
                 
@@ -212,7 +208,7 @@
                             <input type="text" id="pelanggaran-keterangan" placeholder="Keterangan" class="px-3 py-2 border rounded-lg dark:bg-gray-800">
                             <button type="submit" class="bg-school-main text-white px-4 py-2 rounded-lg md:col-span-5">Tambah Pelanggaran</button>
                         </form>
-                        <div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th>No</th><th>Siswa</th><th>Kelas</th><th>Pelanggaran</th><th>Poin</th><th>Tanggal</th><th>Keterangan</th><th width="10%">Aksi</th></tr> </thead><tbody id="table-pelanggaran"></tbody> </table></div>
+                        <div class="overflow-x-auto"><table class="admin-table"><thead><tr><th>No</th><th>Siswa</th><th>Kelas</th><th>Pelanggaran</th><th>Poin</th><th>Tanggal</th><th>Keterangan</th><th width="10%">Aksi</th></tr></thead><tbody id="table-pelanggaran"></tbody></table></div>
                     </div>
                 </div>
                 
@@ -228,7 +224,7 @@
                             <select id="jadwal-mapel" class="px-3 py-2 border rounded-lg dark:bg-gray-800"><option>Pilih Mapel</option></select>
                             <button type="submit" class="bg-school-main text-white px-4 py-2 rounded-lg">Tambah</button>
                         </form>
-                        <div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th>Hari</th><th>Jam</th><th>Kelas</th><th>Mapel</th><th width="10%">Aksi</th></tr> </thead><tbody id="table-jadwal"></tbody> </table></div>
+                        <div class="overflow-x-auto"><table class="admin-table"><thead><tr><th>Hari</th><th>Jam</th><th>Kelas</th><th>Mapel</th><th width="10%">Aksi</th></tr></thead><tbody id="table-jadwal"></tbody></table></div>
                     </div>
                 </div>
                 
@@ -248,7 +244,7 @@
                             <input type="text" id="agenda-keterangan" placeholder="Keterangan" class="px-3 py-2 border rounded-lg dark:bg-gray-800 md:col-span-2">
                             <button type="submit" class="bg-school-main text-white px-4 py-2 rounded-lg md:col-span-2">Simpan Jurnal</button>
                         </form>
-                        <div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th>Tanggal</th><th>Jam</th><th>Kelas</th><th>Mapel</th><th>Materi</th><th>Status</th><th>Absen</th><th>Keterangan</th><th width="8%">Aksi</th></tr> </thead><tbody id="table-agenda"></tbody> </table></div>
+                        <div class="overflow-x-auto"><table class="admin-table"><thead><tr><th>Tanggal</th><th>Jam</th><th>Kelas</th><th>Mapel</th><th>Materi</th><th>Status</th><th>Absen</th><th>Keterangan</th><th width="8%">Aksi</th></tr></thead><tbody id="table-agenda"></tbody></table></div>
                     </div>
                 </div>
                 
@@ -276,7 +272,7 @@
                                 <input type="text" id="bimbingan-solusi" placeholder="Solusi" class="md:col-span-2 px-3 py-2 border rounded-lg dark:bg-gray-800" required>
                                 <button type="submit" class="bg-school-main text-white px-4 py-2 rounded-lg md:col-span-2">Simpan Catatan</button>
                             </form>
-                            <div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th>Tanggal</th><th>Siswa</th><th>Kelas</th><th>Jenis</th><th>Masalah</th><th>Solusi</th><th width="8%">Aksi</th> </thead><tbody id="table-bimbingan"></tbody>  </div>
+                            <div class="overflow-x-auto"><table class="admin-table"><thead><tr><th>Tanggal</th><th>Siswa</th><th>Kelas</th><th>Jenis</th><th>Masalah</th><th>Solusi</th><th width="8%">Aksi</th> </thead><tbody id="table-bimbingan"></tbody> </div>
                         </div>
                     </div>
                 </div>
@@ -296,7 +292,7 @@
                                 <select id="absensi-siswa-kelas" class="px-3 py-2 border rounded-lg dark:bg-gray-800" onchange="loadAbsensiSiswa()"><option>Pilih Kelas</option></select>
                                 <select id="absensi-siswa-mapel" class="px-3 py-2 border rounded-lg dark:bg-gray-800" onchange="loadAbsensiSiswa()"><option>Pilih Mapel</option></select>
                             </div>
-                            <div class="overflow-x-auto mb-4"><table class="admin-table"><thead> <tr><th class="text-center">No</th><th>Nama Siswa</th><th class="text-center">Hadir</th><th class="text-center">Izin</th><th class="text-center">Sakit</th><th class="text-center">Alpa</th> </thead><tbody id="table-absensi-siswa"></tbody> </div>
+                            <div class="overflow-x-auto mb-4"><table class="admin-table"><thead> <tr><th class="text-center">No</th><th>Nama Siswa</th><th class="text-center">Hadir</th><th class="text-center">Izin</th><th class="text-center">Sakit</th><th class="text-center">Alpa</th> </tr></thead><tbody id="table-absensi-siswa"></tbody> </table></div>
                             <button class="bg-school-main text-white px-6 py-2 rounded-lg" onclick="saveAbsensiSiswa()"><i class="fa-solid fa-save mr-2"></i> Simpan Absensi Siswa</button>
                         </div>
                         
@@ -305,7 +301,7 @@
                                 <input type="date" id="absensi-guru-tanggal" class="px-3 py-2 border rounded-lg dark:bg-gray-800" onchange="loadAbsensiGuru()">
                                 <select id="absensi-guru-mapel" class="px-3 py-2 border rounded-lg dark:bg-gray-800" onchange="loadAbsensiGuru()"><option>Semua Mapel</option></select>
                             </div>
-                            <div class="overflow-x-auto mb-4"><table class="admin-table"><thead> <tr><th class="text-center">No</th><th>NIP</th><th>Nama Guru</th><th>Mapel</th><th class="text-center">Hadir</th><th class="text-center">Izin</th><th class="text-center">Sakit</th><th class="text-center">Alpa</th> </thead><tbody id="table-absensi-guru"></tbody> </div>
+                            <div class="overflow-x-auto mb-4"><table class="admin-table"><thead> <tr><th class="text-center">No</th><th>NIP</th><th>Nama Guru</th><th>Mapel</th><th class="text-center">Hadir</th><th class="text-center">Izin</th><th class="text-center">Sakit</th><th class="text-center">Alpa</th> </tr></thead><tbody id="table-absensi-guru"></tbody> </table></div>
                             <button class="bg-school-main text-white px-6 py-2 rounded-lg" onclick="saveAbsensiGuru()"><i class="fa-solid fa-save mr-2"></i> Simpan Absensi Guru</button>
                         </div>
                     </div>
@@ -321,7 +317,7 @@
                             <input type="text" id="penilaian-jenis" placeholder="Jenis (UH 1, UTS, UAS)" class="px-3 py-2 border rounded-lg dark:bg-gray-800">
                             <button class="bg-blue-600 text-white px-4 py-2 rounded-lg" onclick="loadPenilaian()"><i class="fa-solid fa-search mr-2"></i> Muat Data</button>
                         </div>
-                        <div class="overflow-x-auto mb-6"><table class="admin-table"><thead> <tr><th class="text-center">No</th><th>Nama Siswa</th><th class="text-center">Nilai</th> </thead><tbody id="table-penilaian"></tbody> </div>
+                        <div class="overflow-x-auto mb-6"><table class="admin-table"><thead> <tr><th class="text-center">No</th><th>Nama Siswa</th><th class="text-center">Nilai</th> </tr></thead><tbody id="table-penilaian"></tbody> </table></div>
                         <button class="bg-school-main text-white px-6 py-2 rounded-lg" onclick="savePenilaian()"><i class="fa-solid fa-save mr-2"></i> Simpan Nilai</button>
                     </div>
                 </div>
@@ -398,9 +394,11 @@
         // ============================================
         // KONFIGURASI - GANTI DENGAN URL APPS SCRIPT ANDA
         // ============================================
-        let GAS_URL = "https://script.google.com/macros/s/AKfycby1g18YuU8KgxWvO8BluRFm2kDDDD0aYp0dHFeVrB0r41P3fI_huOBRC5NHngR32wRo/exec"; // ISI URL APPS SCRIPT ANDA DISINI
+        // SETELAH DEPLOY APPS SCRIPT, COPY URL NYA DISINI
+        // Contoh: https://script.google.com/macros/s/AKfycbyXXXXXXXXXXXX/exec
+        let GAS_URL = "https://script.google.com/macros/s/AKfycbw2gllJM4cvKtf7RpGpodyQAHxv9iXT98MdtoCEoQReWC-RH60BtDb_jQZqqY6AMJ37/exec";
         
-        // Database
+        // Database lokal
         let db = {
             siswa: [], guru: [], mapel: [], jadwal: [], absensiSiswa: [], absensiGuru: [],
             nilai: [], agenda: [], bimbingan: [], siswaBimbingan: [], pelanggaran: [], config: {}
@@ -425,6 +423,14 @@
             }
         }
         
+        function showToast(message, type = "success") {
+            const toast = document.createElement("div");
+            toast.className = type === "success" ? "toast-success" : "toast-error";
+            toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
         function updateSyncStatus(status) {
             const el = document.getElementById("sync-status");
             if (status === "success") {
@@ -441,6 +447,44 @@
         
         function retrySync() { syncFromCloud(); }
         
+        async function sendToServer(action, payload) {
+            if (!GAS_URL) {
+                showToast("URL Apps Script belum diatur!", "error");
+                return false;
+            }
+            
+            updateSyncStatus("loading");
+            try {
+                const response = await fetch(GAS_URL, {
+                    method: "POST",
+                    mode: "cors",
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({ action, payload })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const result = await response.json();
+                updateSyncStatus("success");
+                
+                if (result.status === "success") {
+                    return true;
+                } else {
+                    throw new Error(result.message || "Gagal menyimpan data");
+                }
+            } catch (error) {
+                console.error("Send to server error:", error);
+                updateSyncStatus("error");
+                showToast(error.message, "error");
+                return false;
+            }
+        }
+        
         async function syncFromCloud() {
             if (!GAS_URL) {
                 showLoading(false);
@@ -456,8 +500,11 @@
             
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 10000);
-                const response = await fetch(`${GAS_URL}?action=all`, { signal: controller.signal });
+                const timeoutId = setTimeout(() => controller.abort(), 15000);
+                const response = await fetch(`${GAS_URL}?action=all`, { 
+                    signal: controller.signal,
+                    mode: "cors"
+                });
                 clearTimeout(timeoutId);
                 
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -482,6 +529,7 @@
                     refreshAll();
                     showLoading(false);
                     updateSyncStatus("success");
+                    showToast("Data berhasil disinkronkan", "success");
                 } else {
                     throw new Error(result.message);
                 }
@@ -494,6 +542,7 @@
                 document.getElementById("retry-btn").classList.remove("hidden");
                 document.getElementById("loading-title").innerText = "Mode Offline";
                 document.getElementById("loading-desc").innerText = error.message;
+                showToast("Gagal koneksi ke server, menggunakan data lokal", "error");
             }
         }
         
@@ -519,33 +568,22 @@
             }
         }
         
-        async function sendToServer(action, payload) {
-            if (!GAS_URL) return false;
-            updateSyncStatus("loading");
-            try {
-                const response = await fetch(GAS_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ action, payload })
-                });
-                const result = await response.json();
-                updateSyncStatus("success");
-                return result.status === "success";
-            } catch (error) {
-                updateSyncStatus("error");
-                return false;
-            }
-        }
-        
         // ============================================
         // RENDER FUNCTIONS
         // ============================================
         
         function renderSiswa() {
             document.getElementById("table-siswa").innerHTML = db.siswa.map((s, i) => `
-                <tr><td class="text-center">${i+1}</td><td>${s.NISN}</td><td>${s['Nama Siswa']}</td><td>${s.Kelas}</td>
-                <td><button class="action-btn btn-edit" onclick="editSiswa('${s.ID}')"><i class="fa-solid fa-pen"></i> Edit</button>
-                <button class="action-btn btn-delete" onclick="hapusSiswa('${s.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button></td></tr>
+                <tr>
+                    <td class="text-center">${i+1}</td>
+                    <td>${s.NISN}</td>
+                    <td>${s['Nama Siswa']}</td>
+                    <td>${s.Kelas}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editSiswa('${s.ID}')"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button class="action-btn btn-delete" onclick="hapusSiswa('${s.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button>
+                    </td>
+                </tr>
             `).join("");
         }
         
@@ -561,23 +599,27 @@
         }
         
         async function hapusSiswa(id) {
-            if (await Swal.fire({ title: "Yakin?", icon: "warning", showCancelButton: true })) {
+            const confirm = await Swal.fire({ title: "Yakin hapus?", text: "Data tidak dapat dikembalikan!", icon: "warning", showCancelButton: true });
+            if (confirm.isConfirmed) {
                 if (await sendToServer("deleteSiswa", { id })) {
                     db.siswa = db.siswa.filter(s => s.ID !== id);
                     renderSiswa();
                     refreshSelectors();
                     updateStats();
+                    showToast("Siswa berhasil dihapus", "success");
                 }
             }
         }
         
         async function hapusSemuaSiswa() {
-            if (await Swal.fire({ title: "Hapus Semua?", icon: "warning", showCancelButton: true })) {
+            const confirm = await Swal.fire({ title: "Hapus Semua?", text: "Semua data siswa akan dihapus!", icon: "warning", showCancelButton: true });
+            if (confirm.isConfirmed) {
                 if (await sendToServer("deleteAllSiswa", {})) {
                     db.siswa = [];
                     renderSiswa();
                     refreshSelectors();
                     updateStats();
+                    showToast("Semua siswa berhasil dihapus", "success");
                 }
             }
         }
@@ -585,26 +627,43 @@
         document.getElementById("form-siswa")?.addEventListener("submit", async (e) => {
             e.preventDefault();
             const editId = document.getElementById("edit-siswa-id").value;
-            const payload = { ID: editId || Date.now().toString(), NISN: document.getElementById("nisn").value, "Nama Siswa": document.getElementById("nama-siswa").value, Kelas: document.getElementById("kelas-siswa").value };
-            if (await sendToServer(editId ? "updateSiswa" : "saveSiswa", payload)) {
+            const payload = { 
+                ID: editId || Date.now().toString(), 
+                NISN: document.getElementById("nisn").value, 
+                "Nama Siswa": document.getElementById("nama-siswa").value, 
+                Kelas: document.getElementById("kelas-siswa").value 
+            };
+            
+            const action = editId ? "updateSiswa" : "saveSiswa";
+            if (await sendToServer(action, payload)) {
                 if (editId) {
                     const idx = db.siswa.findIndex(s => s.ID === editId);
                     if (idx !== -1) db.siswa[idx] = payload;
-                } else db.siswa.push(payload);
+                } else {
+                    db.siswa.push(payload);
+                }
                 renderSiswa();
                 refreshSelectors();
                 updateStats();
                 document.getElementById("edit-siswa-id").value = "";
                 document.getElementById("form-siswa").querySelector("button").innerHTML = "Tambah Siswa";
                 e.target.reset();
+                showToast(editId ? "Siswa berhasil diupdate" : "Siswa berhasil ditambahkan", "success");
             }
         });
         
         function renderGuru() {
             document.getElementById("table-guru").innerHTML = db.guru.map((g, i) => `
-                <tr><td class="text-center">${i+1}</td><td>${g.NIP}</td><td>${g['Nama Guru']}</td><td>${g.Mapel}</td>
-                <td><button class="action-btn btn-edit" onclick="editGuru('${g.ID}')"><i class="fa-solid fa-pen"></i> Edit</button>
-                <button class="action-btn btn-delete" onclick="hapusGuru('${g.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button></td></tr>
+                <tr>
+                    <td class="text-center">${i+1}</td>
+                    <td>${g.NIP}</td>
+                    <td>${g['Nama Guru']}</td>
+                    <td>${g.Mapel}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editGuru('${g.ID}')"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button class="action-btn btn-delete" onclick="hapusGuru('${g.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button>
+                    </td>
+                </tr>
             `).join("");
         }
         
@@ -620,23 +679,27 @@
         }
         
         async function hapusGuru(id) {
-            if (await Swal.fire({ title: "Yakin?", icon: "warning", showCancelButton: true })) {
+            const confirm = await Swal.fire({ title: "Yakin hapus?", icon: "warning", showCancelButton: true });
+            if (confirm.isConfirmed) {
                 if (await sendToServer("deleteGuru", { id })) {
                     db.guru = db.guru.filter(g => g.ID !== id);
                     renderGuru();
                     refreshSelectors();
                     updateStats();
+                    showToast("Guru berhasil dihapus", "success");
                 }
             }
         }
         
         async function hapusSemuaGuru() {
-            if (await Swal.fire({ title: "Hapus Semua?", icon: "warning", showCancelButton: true })) {
+            const confirm = await Swal.fire({ title: "Hapus Semua?", icon: "warning", showCancelButton: true });
+            if (confirm.isConfirmed) {
                 if (await sendToServer("deleteAllGuru", {})) {
                     db.guru = [];
                     renderGuru();
                     refreshSelectors();
                     updateStats();
+                    showToast("Semua guru berhasil dihapus", "success");
                 }
             }
         }
@@ -644,26 +707,43 @@
         document.getElementById("form-guru")?.addEventListener("submit", async (e) => {
             e.preventDefault();
             const editId = document.getElementById("edit-guru-id").value;
-            const payload = { ID: editId || Date.now().toString(), NIP: document.getElementById("nip-guru").value, "Nama Guru": document.getElementById("nama-guru").value, Mapel: document.getElementById("mapel-guru").value };
-            if (await sendToServer(editId ? "updateGuru" : "saveGuru", payload)) {
+            const payload = { 
+                ID: editId || Date.now().toString(), 
+                NIP: document.getElementById("nip-guru").value, 
+                "Nama Guru": document.getElementById("nama-guru").value, 
+                Mapel: document.getElementById("mapel-guru").value 
+            };
+            
+            const action = editId ? "updateGuru" : "saveGuru";
+            if (await sendToServer(action, payload)) {
                 if (editId) {
                     const idx = db.guru.findIndex(g => g.ID === editId);
                     if (idx !== -1) db.guru[idx] = payload;
-                } else db.guru.push(payload);
+                } else {
+                    db.guru.push(payload);
+                }
                 renderGuru();
                 refreshSelectors();
                 updateStats();
                 document.getElementById("edit-guru-id").value = "";
                 document.getElementById("form-guru").querySelector("button").innerHTML = "Tambah Guru";
                 e.target.reset();
+                showToast(editId ? "Guru berhasil diupdate" : "Guru berhasil ditambahkan", "success");
             }
         });
         
         function renderMapel() {
             document.getElementById("table-mapel").innerHTML = db.mapel.map((m, i) => `
-                <tr><td class="text-center">${i+1}</td><td>${m['Nama Mapel']}</td><td>${m.Semester}</td><td>${m['Tahun Ajaran']}</td>
-                <td><button class="action-btn btn-edit" onclick="editMapel('${m.ID}')"><i class="fa-solid fa-pen"></i> Edit</button>
-                <button class="action-btn btn-delete" onclick="hapusMapel('${m.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button></td></tr>
+                <tr>
+                    <td class="text-center">${i+1}</td>
+                    <td>${m['Nama Mapel']}</td>
+                    <td>${m.Semester}</td>
+                    <td>${m['Tahun Ajaran']}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editMapel('${m.ID}')"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button class="action-btn btn-delete" onclick="hapusMapel('${m.ID}')"><i class="fa-solid fa-trash"></i> Hapus</button>
+                    </td>
+                </tr>
             `).join("");
         }
         
@@ -679,23 +759,27 @@
         }
         
         async function hapusMapel(id) {
-            if (await Swal.fire({ title: "Yakin?", icon: "warning", showCancelButton: true })) {
+            const confirm = await Swal.fire({ title: "Yakin hapus?", icon: "warning", showCancelButton: true });
+            if (confirm.isConfirmed) {
                 if (await sendToServer("deleteMapel", { id })) {
                     db.mapel = db.mapel.filter(m => m.ID !== id);
                     renderMapel();
                     refreshSelectors();
                     updateStats();
+                    showToast("Mapel berhasil dihapus", "success");
                 }
             }
         }
         
         async function hapusSemuaMapel() {
-            if (await Swal.fire({ title: "Hapus Semua?", icon: "warning", showCancelButton: true })) {
+            const confirm = await Swal.fire({ title: "Hapus Semua?", icon: "warning", showCancelButton: true });
+            if (confirm.isConfirmed) {
                 if (await sendToServer("deleteAllMapel", {})) {
                     db.mapel = [];
                     renderMapel();
                     refreshSelectors();
                     updateStats();
+                    showToast("Semua mapel berhasil dihapus", "success");
                 }
             }
         }
@@ -703,18 +787,28 @@
         document.getElementById("form-mapel")?.addEventListener("submit", async (e) => {
             e.preventDefault();
             const editId = document.getElementById("edit-mapel-id").value;
-            const payload = { ID: editId || Date.now().toString(), "Nama Mapel": document.getElementById("nama-mapel").value, Semester: document.getElementById("semester").value, "Tahun Ajaran": document.getElementById("tahun-ajaran").value };
-            if (await sendToServer(editId ? "updateMapel" : "saveMapel", payload)) {
+            const payload = { 
+                ID: editId || Date.now().toString(), 
+                "Nama Mapel": document.getElementById("nama-mapel").value, 
+                Semester: document.getElementById("semester").value, 
+                "Tahun Ajaran": document.getElementById("tahun-ajaran").value 
+            };
+            
+            const action = editId ? "updateMapel" : "saveMapel";
+            if (await sendToServer(action, payload)) {
                 if (editId) {
                     const idx = db.mapel.findIndex(m => m.ID === editId);
                     if (idx !== -1) db.mapel[idx] = payload;
-                } else db.mapel.push(payload);
+                } else {
+                    db.mapel.push(payload);
+                }
                 renderMapel();
                 refreshSelectors();
                 updateStats();
                 document.getElementById("edit-mapel-id").value = "";
                 document.getElementById("form-mapel").querySelector("button").innerHTML = "Tambah Mapel";
                 e.target.reset();
+                showToast(editId ? "Mapel berhasil diupdate" : "Mapel berhasil ditambahkan", "success");
             }
         });
         
@@ -723,10 +817,19 @@
                 let cls = "poin-sedang";
                 if (p.Poin <= 10) cls = "poin-rendah";
                 if (p.Poin >= 50) cls = "poin-tinggi";
-                return `<tr><td class="text-center">${i+1}</td><td>${p['Nama Siswa']}</td><td>${p.Kelas}</td><td>${p.Pelanggaran}</td>
-                <td><span class="poin-badge ${cls}">${p.Poin}</span></td><td>${p.Tanggal}</td><td>${p.Keterangan || "-"}</td>
-                <td><button class="action-btn btn-edit" onclick="editPelanggaran('${p.ID}')"><i class="fa-solid fa-pen"></i></button>
-                <button class="action-btn btn-delete" onclick="hapusPelanggaran('${p.ID}')"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+                return `<tr>
+                    <td class="text-center">${i+1}</td>
+                    <td>${p['Nama Siswa']}</td>
+                    <td>${p.Kelas}</td>
+                    <td>${p.Pelanggaran}</td>
+                    <td><span class="poin-badge ${cls}">${p.Poin}</span></td>
+                    <td>${p.Tanggal}</td>
+                    <td>${p.Keterangan || "-"}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editPelanggaran('${p.ID}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="action-btn btn-delete" onclick="hapusPelanggaran('${p.ID}')"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>`;
             }).join("");
         }
         
@@ -744,21 +847,25 @@
         }
         
         async function hapusPelanggaran(id) {
-            if (await Swal.fire({ title: "Yakin?", icon: "warning", showCancelButton: true })) {
+            const confirm = await Swal.fire({ title: "Yakin hapus?", icon: "warning", showCancelButton: true });
+            if (confirm.isConfirmed) {
                 if (await sendToServer("deletePelanggaran", { id })) {
                     db.pelanggaran = db.pelanggaran.filter(p => p.ID !== id);
                     renderPelanggaran();
                     updateStats();
+                    showToast("Pelanggaran berhasil dihapus", "success");
                 }
             }
         }
         
         async function hapusSemuaPelanggaran() {
-            if (await Swal.fire({ title: "Hapus Semua?", icon: "warning", showCancelButton: true })) {
+            const confirm = await Swal.fire({ title: "Hapus Semua?", icon: "warning", showCancelButton: true });
+            if (confirm.isConfirmed) {
                 if (await sendToServer("deleteAllPelanggaran", {})) {
                     db.pelanggaran = [];
                     renderPelanggaran();
                     updateStats();
+                    showToast("Semua pelanggaran berhasil dihapus", "success");
                 }
             }
         }
@@ -777,24 +884,37 @@
                 Tanggal: document.getElementById("pelanggaran-tanggal").value,
                 Keterangan: document.getElementById("pelanggaran-keterangan").value
             };
-            if (await sendToServer(editId ? "updatePelanggaran" : "savePelanggaran", payload)) {
+            
+            const action = editId ? "updatePelanggaran" : "savePelanggaran";
+            if (await sendToServer(action, payload)) {
                 if (editId) {
                     const idx = db.pelanggaran.findIndex(p => p.ID === editId);
                     if (idx !== -1) db.pelanggaran[idx] = payload;
-                } else db.pelanggaran.push(payload);
+                } else {
+                    db.pelanggaran.push(payload);
+                }
                 renderPelanggaran();
                 updateStats();
                 document.getElementById("edit-pelanggaran-id").value = "";
                 document.getElementById("form-pelanggaran").querySelector("button").innerHTML = "Tambah Pelanggaran";
                 e.target.reset();
+                showToast(editId ? "Pelanggaran berhasil diupdate" : "Pelanggaran berhasil ditambahkan", "success");
             }
         });
         
         function renderJadwal() {
             document.getElementById("table-jadwal").innerHTML = db.jadwal.map((j, i) => `
-                <tr><td>${j.Hari}</td><td>${j.Jam}</td><td>${j.Kelas}</td><td>${j.Mapel}</td>
-                <td><button class="action-btn btn-edit" onclick="editJadwal('${j.ID}')"><i class="fa-solid fa-pen"></i></button>
-                <button class="action-btn btn-delete" onclick="hapusJadwal('${j.ID}')"><i class="fa-solid fa-trash"></i></button></td>
+                <tr>
+                    <td class="text-center">${i+1}</td>
+                    <td>${j.Hari}</td>
+                    <td>${j.Jam}</td>
+                    <td>${j.Kelas}</td>
+                    <td>${j.Mapel}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editJadwal('${j.ID}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="action-btn btn-delete" onclick="hapusJadwal('${j.ID}')"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                 </tr>
             `).join("");
         }
         
@@ -811,19 +931,23 @@
         }
         
         async function hapusJadwal(id) {
-            if (await Swal.fire({ title: "Yakin?", icon: "warning", showCancelButton: true })) {
+            const confirm = await Swal.fire({ title: "Yakin hapus?", icon: "warning", showCancelButton: true });
+            if (confirm.isConfirmed) {
                 if (await sendToServer("deleteJadwal", { id })) {
                     db.jadwal = db.jadwal.filter(j => j.ID !== id);
                     renderJadwal();
+                    showToast("Jadwal berhasil dihapus", "success");
                 }
             }
         }
         
         async function hapusSemuaJadwal() {
-            if (await Swal.fire({ title: "Hapus Semua?", icon: "warning", showCancelButton: true })) {
+            const confirm = await Swal.fire({ title: "Hapus Semua?", icon: "warning", showCancelButton: true });
+            if (confirm.isConfirmed) {
                 if (await sendToServer("deleteAllJadwal", {})) {
                     db.jadwal = [];
                     renderJadwal();
+                    showToast("Semua jadwal berhasil dihapus", "success");
                 }
             }
         }
@@ -831,26 +955,47 @@
         document.getElementById("form-jadwal")?.addEventListener("submit", async (e) => {
             e.preventDefault();
             const editId = document.getElementById("edit-jadwal-id").value;
-            const payload = { ID: editId || Date.now().toString(), Hari: document.getElementById("jadwal-hari").value, Jam: document.getElementById("jadwal-jam").value, Kelas: document.getElementById("jadwal-kelas").value, Mapel: document.getElementById("jadwal-mapel").value };
-            if (await sendToServer(editId ? "updateJadwal" : "saveJadwal", payload)) {
+            const payload = { 
+                ID: editId || Date.now().toString(), 
+                Hari: document.getElementById("jadwal-hari").value, 
+                Jam: document.getElementById("jadwal-jam").value, 
+                Kelas: document.getElementById("jadwal-kelas").value, 
+                Mapel: document.getElementById("jadwal-mapel").value 
+            };
+            
+            const action = editId ? "updateJadwal" : "saveJadwal";
+            if (await sendToServer(action, payload)) {
                 if (editId) {
                     const idx = db.jadwal.findIndex(j => j.ID === editId);
                     if (idx !== -1) db.jadwal[idx] = payload;
-                } else db.jadwal.push(payload);
+                } else {
+                    db.jadwal.push(payload);
+                }
                 renderJadwal();
                 document.getElementById("edit-jadwal-id").value = "";
                 document.getElementById("form-jadwal").querySelector("button").innerHTML = "Tambah";
                 e.target.reset();
+                showToast(editId ? "Jadwal berhasil diupdate" : "Jadwal berhasil ditambahkan", "success");
             }
         });
         
         function renderAgenda() {
             document.getElementById("table-agenda").innerHTML = db.agenda.map((a, i) => `
-                <tr><td>${a.Tanggal}</td><td>${a.Jam}</td><td>${a.Kelas}</td><td>${a.Mapel}</td>
-                <td>${a.Materi}</td><td><span class="px-2 py-1 rounded-full text-xs ${a.Status === 'Terlaksana' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}">${a.Status}</span></td>
-                <td>${a['Absen Siswa']}</td><td>${a.Ket || '-'}</td>
-                <td><button class="action-btn btn-edit" onclick="editAgenda('${a.ID}')"><i class="fa-solid fa-pen"></i></button>
-                <button class="action-btn btn-delete" onclick="hapusAgenda('${a.ID}')"><i class="fa-solid fa-trash"></i></button></td>
+                <tr>
+                    <td class="text-center">${i+1}</td>
+                    <td>${a.Tanggal}</td>
+                    <td>${a.Jam}</td>
+                    <td>${a.Kelas}</td>
+                    <td>${a.Mapel}</td>
+                    <td>${a.Materi}</td>
+                    <td><span class="px-2 py-1 rounded-full text-xs ${a.Status === 'Terlaksana' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}">${a.Status}</span></td>
+                    <td>${a['Absen Siswa']}</td>
+                    <td>${a.Ket || '-'}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editAgenda('${a.ID}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="action-btn btn-delete" onclick="hapusAgenda('${a.ID}')"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                 </tr>
             `).join("");
         }
         
@@ -871,19 +1016,23 @@
         }
         
         async function hapusAgenda(id) {
-            if (await Swal.fire({ title: "Yakin?", icon: "warning", showCancelButton: true })) {
+            const confirm = await Swal.fire({ title: "Yakin hapus?", icon: "warning", showCancelButton: true });
+            if (confirm.isConfirmed) {
                 if (await sendToServer("deleteAgenda", { id })) {
                     db.agenda = db.agenda.filter(a => a.ID !== id);
                     renderAgenda();
+                    showToast("Agenda berhasil dihapus", "success");
                 }
             }
         }
         
         async function hapusSemuaAgenda() {
-            if (await Swal.fire({ title: "Hapus Semua?", icon: "warning", showCancelButton: true })) {
+            const confirm = await Swal.fire({ title: "Hapus Semua?", icon: "warning", showCancelButton: true });
+            if (confirm.isConfirmed) {
                 if (await sendToServer("deleteAllAgenda", {})) {
                     db.agenda = [];
                     renderAgenda();
+                    showToast("Semua agenda berhasil dihapus", "success");
                 }
             }
         }
@@ -903,25 +1052,39 @@
                 Ket: document.getElementById("agenda-keterangan").value,
                 "Nama Guru": db.config.Nama_Guru || "Guru"
             };
-            if (await sendToServer(editId ? "updateAgenda" : "saveAgenda", payload)) {
+            
+            const action = editId ? "updateAgenda" : "saveAgenda";
+            if (await sendToServer(action, payload)) {
                 if (editId) {
                     const idx = db.agenda.findIndex(a => a.ID === editId);
                     if (idx !== -1) db.agenda[idx] = payload;
-                } else db.agenda.push(payload);
+                } else {
+                    db.agenda.push(payload);
+                }
                 renderAgenda();
                 document.getElementById("edit-agenda-id").value = "";
                 document.getElementById("form-agenda").querySelector("button").innerHTML = "Simpan Jurnal";
                 e.target.reset();
                 document.getElementById("agenda-tanggal").valueAsDate = new Date();
+                showToast(editId ? "Agenda berhasil diupdate" : "Agenda berhasil ditambahkan", "success");
             }
         });
         
         function renderBimbingan() {
             document.getElementById("table-bimbingan").innerHTML = db.bimbingan.map((b, i) => `
-                <tr><td>${b.Tanggal}</td><td>${b['Nama Siswa']}</td><td>${b.Kelas}</td><td>${b.Jenis}</td>
-                <td>${b.Kasus}</td><td>${b['Tindak Lanjut']}</td>
-                <td><button class="action-btn btn-edit" onclick="editBimbingan('${b.ID}')"><i class="fa-solid fa-pen"></i></button>
-                <button class="action-btn btn-delete" onclick="hapusBimbingan('${b.ID}')"><i class="fa-solid fa-trash"></i></button></td>
+                <tr>
+                    <td class="text-center">${i+1}</td>
+                    <td>${b.Tanggal}</td>
+                    <td>${b['Nama Siswa']}</td>
+                    <td>${b.Kelas}</td>
+                    <td>${b.Jenis}</td>
+                    <td>${b.Kasus}</td>
+                    <td>${b['Tindak Lanjut']}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editBimbingan('${b.ID}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="action-btn btn-delete" onclick="hapusBimbingan('${b.ID}')"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                 </tr>
             `).join("");
         }
         
@@ -940,29 +1103,38 @@
         }
         
         async function hapusBimbingan(id) {
-            if (await Swal.fire({ title: "Yakin?", icon: "warning", showCancelButton: true })) {
+            const confirm = await Swal.fire({ title: "Yakin hapus?", icon: "warning", showCancelButton: true });
+            if (confirm.isConfirmed) {
                 if (await sendToServer("deleteBimbingan", { id })) {
                     db.bimbingan = db.bimbingan.filter(b => b.ID !== id);
                     renderBimbingan();
+                    showToast("Catatan bimbingan berhasil dihapus", "success");
                 }
             }
         }
         
         document.getElementById("form-daftar-siswa")?.addEventListener("submit", async (e) => {
             e.preventDefault();
-            const payload = { ID: Date.now().toString(), "Nama Siswa": document.getElementById("daftar-nama").value, Kelas: document.getElementById("daftar-kelas").value };
+            const payload = { 
+                ID: Date.now().toString(), 
+                "Nama Siswa": document.getElementById("daftar-nama").value, 
+                Kelas: document.getElementById("daftar-kelas").value 
+            };
             if (await sendToServer("saveSiswaBimbingan", payload)) {
                 db.siswaBimbingan.push(payload);
                 refreshSelectors();
                 e.target.reset();
+                showToast("Siswa berhasil ditambahkan ke daftar bimbingan", "success");
             }
         });
         
         async function hapusSemuaSiswaBimbingan() {
-            if (await Swal.fire({ title: "Hapus Semua?", icon: "warning", showCancelButton: true })) {
+            const confirm = await Swal.fire({ title: "Hapus Semua?", icon: "warning", showCancelButton: true });
+            if (confirm.isConfirmed) {
                 if (await sendToServer("deleteAllSiswaBimbingan", {})) {
                     db.siswaBimbingan = [];
                     refreshSelectors();
+                    showToast("Semua siswa bimbingan berhasil dihapus", "success");
                 }
             }
         }
@@ -986,16 +1158,21 @@
                 "Tindak Lanjut": document.getElementById("bimbingan-solusi").value,
                 "Guru Wali": db.config.Nama_Guru || "Guru"
             };
-            if (await sendToServer(editId ? "updateBimbingan" : "saveBimbingan", payload)) {
+            
+            const action = editId ? "updateBimbingan" : "saveBimbingan";
+            if (await sendToServer(action, payload)) {
                 if (editId) {
                     const idx = db.bimbingan.findIndex(b => b.ID === editId);
                     if (idx !== -1) db.bimbingan[idx] = payload;
-                } else db.bimbingan.push(payload);
+                } else {
+                    db.bimbingan.push(payload);
+                }
                 renderBimbingan();
                 document.getElementById("edit-bimbingan-id").value = "";
                 document.getElementById("form-bimbingan").querySelector("button").innerHTML = "Simpan Catatan";
                 e.target.reset();
                 document.getElementById("bimbingan-tanggal").valueAsDate = new Date();
+                showToast(editId ? "Catatan bimbingan berhasil diupdate" : "Catatan bimbingan berhasil ditambahkan", "success");
             }
         });
         
@@ -1028,7 +1205,7 @@
             const mapel = document.getElementById("absensi-siswa-mapel").value;
             const tbody = document.getElementById("table-absensi-siswa");
             if (!tgl || !kelas || !mapel) {
-                tbody.innerHTML = 'berguna<td colspan="6" class="text-center py-8">Pilih Tanggal, Kelas, dan Mapel</td>berguna';
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8">Pilih Tanggal, Kelas, dan Mapel</td></tr>';
                 return;
             }
             const siswaKelas = db.siswa.filter(s => s.Kelas === kelas);
@@ -1051,7 +1228,10 @@
             const tgl = document.getElementById("absensi-siswa-tanggal").value;
             const kelas = document.getElementById("absensi-siswa-kelas").value;
             const mapel = document.getElementById("absensi-siswa-mapel").value;
-            if (!tgl || !kelas || !mapel) { Swal.fire("Peringatan", "Pilih tanggal, kelas, mapel!", "warning"); return; }
+            if (!tgl || !kelas || !mapel) { 
+                Swal.fire("Peringatan", "Pilih tanggal, kelas, mapel!", "warning"); 
+                return; 
+            }
             const records = [];
             document.querySelectorAll('#table-absensi-siswa tr[data-id]').forEach(tr => {
                 const radio = tr.querySelector('input[type="radio"]:checked');
@@ -1074,7 +1254,7 @@
             const mapel = document.getElementById("absensi-guru-mapel").value;
             const tbody = document.getElementById("table-absensi-guru");
             if (!tgl) {
-                tbody.innerHTML = 'berguna<td colspan="8" class="text-center py-8">Pilih Tanggal</td>berguna';
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center py-8">Pilih Tanggal</td></tr>';
                 return;
             }
             let guruList = db.guru;
@@ -1098,7 +1278,10 @@
         
         async function saveAbsensiGuru() {
             const tgl = document.getElementById("absensi-guru-tanggal").value;
-            if (!tgl) { Swal.fire("Peringatan", "Pilih tanggal!", "warning"); return; }
+            if (!tgl) { 
+                Swal.fire("Peringatan", "Pilih tanggal!", "warning"); 
+                return; 
+            }
             const records = [];
             document.querySelectorAll('#table-absensi-guru tr[data-id]').forEach(tr => {
                 const radio = tr.querySelector('input[type="radio"]:checked');
@@ -1126,7 +1309,7 @@
             const jenis = document.getElementById("penilaian-jenis").value;
             const tbody = document.getElementById("table-penilaian");
             if (!kelas || !mapel || !jenis) {
-                tbody.innerHTML = 'berguna<td colspan="3" class="text-center py-8">Pilih Kelas, Mapel, dan Jenis Penilaian</td>berguna';
+                tbody.innerHTML = '<tr><td colspan="3" class="text-center py-8">Pilih Kelas, Mapel, dan Jenis Penilaian</td></tr>';
                 return;
             }
             const siswaKelas = db.siswa.filter(s => s.Kelas === kelas);
@@ -1136,7 +1319,7 @@
                 return `<tr data-id="${s.ID}" data-nama="${s['Nama Siswa']}">
                     <td class="text-center">${i+1}</td>
                     <td>${s['Nama Siswa']}</td>
-                    <td class="text-center"><input type="number" class="input-nilai" value="${rec && rec.Nilai ? rec.Nilai : ""}" placeholder="0-100" min="0" max="100" step="1"></td>
+                    <td class="text-center"><input type="number" class="input-nilai" value="${rec && rec.Nilai ? rec.Nilai : ""}" placeholder="0-100" min="0" max="100" step="1" class="w-20 px-2 py-1 border rounded"></td>
                 </tr>`;
             }).join("");
         }
@@ -1145,7 +1328,10 @@
             const kelas = document.getElementById("penilaian-kelas").value;
             const mapel = document.getElementById("penilaian-mapel").value;
             const jenis = document.getElementById("penilaian-jenis").value;
-            if (!kelas || !mapel || !jenis) { Swal.fire("Peringatan", "Pilih kelas, mapel, jenis!", "warning"); return; }
+            if (!kelas || !mapel || !jenis) { 
+                Swal.fire("Peringatan", "Pilih kelas, mapel, jenis!", "warning"); 
+                return; 
+            }
             const records = [];
             document.querySelectorAll('#table-penilaian tr[data-id]').forEach(tr => {
                 const nilai = tr.querySelector(".input-nilai").value;
@@ -1181,28 +1367,45 @@
         function previewKartu() {
             const jenis = document.getElementById("kartu-jenis").value;
             const selected = document.getElementById("kartu-data").value;
-            if (!selected) { Swal.fire("Peringatan", "Pilih data!", "warning"); return; }
+            if (!selected) { 
+                Swal.fire("Peringatan", "Pilih data!", "warning"); 
+                return; 
+            }
             const previewDiv = document.getElementById("preview-kartu");
             if (jenis === "siswa") {
-                const siswa = db.siswa.find(s => s.Kelas === selected);
-                if (!siswa) return;
-                previewDiv.innerHTML = `
-                    <div class="flex justify-center">
-                        <div class="w-[280px] bg-white rounded-xl shadow-lg border">
-                            <div class="bg-school-main p-3 text-white text-center">KARTU PELAJAR</div>
-                            <div class="p-4"><p><strong>Nama:</strong> ${siswa['Nama Siswa']}</p><p><strong>NISN:</strong> ${siswa.NISN}</p><p><strong>Kelas:</strong> ${siswa.Kelas}</p></div>
-                            <div id="preview-qr" class="flex justify-center p-4"></div>
+                const siswaList = db.siswa.filter(s => s.Kelas === selected);
+                if (siswaList.length === 0) return;
+                let html = '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">';
+                siswaList.forEach(s => {
+                    html += `
+                        <div class="bg-white rounded-xl shadow-lg border overflow-hidden">
+                            <div class="bg-school-main p-3 text-white text-center font-bold">KARTU PELAJAR</div>
+                            <div class="p-4">
+                                <p><strong>Nama:</strong> ${s['Nama Siswa']}</p>
+                                <p><strong>NISN:</strong> ${s.NISN}</p>
+                                <p><strong>Kelas:</strong> ${s.Kelas}</p>
+                            </div>
+                            <div class="flex justify-center p-4" id="qr-${s.ID}"></div>
                         </div>
-                    </div>`;
-                new QRCode(document.getElementById("preview-qr"), { text: String(siswa.NISN), width: 100, height: 100 });
+                    `;
+                });
+                html += '</div>';
+                previewDiv.innerHTML = html;
+                siswaList.forEach(s => {
+                    new QRCode(document.getElementById(`qr-${s.ID}`), { text: String(s.NISN), width: 100, height: 100 });
+                });
             } else {
                 const guru = db.guru.find(g => g.ID === selected);
                 if (!guru) return;
                 previewDiv.innerHTML = `
                     <div class="flex justify-center">
                         <div class="w-[280px] bg-white rounded-xl shadow-lg border">
-                            <div class="bg-school-main p-3 text-white text-center">KARTU GURU</div>
-                            <div class="p-4"><p><strong>Nama:</strong> ${guru['Nama Guru']}</p><p><strong>NIP:</strong> ${guru.NIP}</p><p><strong>Mapel:</strong> ${guru.Mapel}</p></div>
+                            <div class="bg-school-main p-3 text-white text-center font-bold">KARTU GURU</div>
+                            <div class="p-4">
+                                <p><strong>Nama:</strong> ${guru['Nama Guru']}</p>
+                                <p><strong>NIP:</strong> ${guru.NIP}</p>
+                                <p><strong>Mapel:</strong> ${guru.Mapel}</p>
+                            </div>
                             <div id="preview-qr" class="flex justify-center p-4"></div>
                         </div>
                     </div>`;
@@ -1214,11 +1417,11 @@
         async function cetakKartu() {
             const jenis = document.getElementById("kartu-jenis").value;
             const selected = document.getElementById("kartu-data").value;
-            if (!selected) { Swal.fire("Peringatan", "Pilih data!", "warning"); return; }
-            let dataList = [];
-            if (jenis === "siswa") dataList = db.siswa.filter(s => s.Kelas === selected);
-            else dataList = db.guru.filter(g => g.ID === selected);
-            Swal.fire("Info", `Membuat ${dataList.length} kartu...`, "info");
+            if (!selected) { 
+                Swal.fire("Peringatan", "Pilih data!", "warning"); 
+                return; 
+            }
+            Swal.fire("Info", "Fitur cetak PDF sedang dalam pengembangan", "info");
         }
         
         // ============================================
@@ -1228,71 +1431,77 @@
         function laporanAbsensiSiswa(tipe) {
             const kelas = document.getElementById("laporan-siswa-kelas").value;
             const mapel = document.getElementById("laporan-siswa-mapel").value;
-            if (!kelas || !mapel) { Swal.fire("Peringatan", "Pilih kelas dan mapel!", "warning"); return; }
+            if (!kelas || !mapel) { 
+                Swal.fire("Peringatan", "Pilih kelas dan mapel!", "warning"); 
+                return; 
+            }
             let filtered = db.absensiSiswa.filter(a => a.Kelas === kelas && a.Mapel === mapel);
             const siswaList = db.siswa.filter(s => s.Kelas === kelas);
-            let html = `<table class="admin-table"><thead><tr><th>No</th><th>Nama</th><th>H</th><th>I</th><th>S</th><th>A</th><th>%</th></tr></thead><tbody>`;
+            let html = `<div class="overflow-x-auto"><table class="admin-table"><thead><tr><th>No</th><th>Nama</th><th>H</th><th>I</th><th>S</th><th>A</th><th>%</th></tr></thead><tbody>`;
             siswaList.forEach((s, i) => {
                 const abs = filtered.filter(a => a['Nama Siswa'] === (s['Nama Siswa'] || s.Nama));
                 let h=0, iz=0, sk=0, a=0;
                 abs.forEach(ab => { const st = String(ab.Status).charAt(0); if(st==="H") h++; else if(st==="I") iz++; else if(st==="S") sk++; else if(st==="A") a++; });
                 const total = h+iz+sk+a;
-                html += `<tr><td>${i+1}</td><td>${s['Nama Siswa']}</td><td>${h}</td><td>${iz}</td><td>${sk}</td><td>${a}</td><td>${total>0?Math.round(h/total*100):0}%</td></tr>`;
+                html += `<tr><td class="text-center">${i+1}</td><td>${s['Nama Siswa']}</td><td class="text-center">${h}</td><td class="text-center">${iz}</td><td class="text-center">${sk}</td><td class="text-center">${a}</td><td class="text-center">${total>0?Math.round(h/total*100):0}%</td></tr>`;
             });
-            html += `</tbody></table>`;
-            Swal.fire({ title: "Laporan Absensi", html: html, width: "800px" });
+            html += `</tbody></table></div>`;
+            Swal.fire({ title: "Laporan Absensi Siswa", html: html, width: "900px" });
         }
         
         function laporanAbsensiGuru(tipe) {
             const mapel = document.getElementById("laporan-guru-mapel").value;
             let filtered = db.absensiGuru;
-            if (mapel && mapel !== "ALL") filtered = filtered.filter(a => a.Mapel === mapel);
-            let html = `<table class="admin-table"><thead><tr><th>No</th><th>Nama</th><th>NIP</th><th>H</th><th>I</th><th>S</th><th>A</th><th>%</th></tr></thead><tbody>`;
+            if (mapel && mapel !== "ALL" && mapel !== "Semua Mapel") filtered = filtered.filter(a => a.Mapel === mapel);
+            let html = `<div class="overflow-x-auto"><table class="admin-table"><thead><tr><th>No</th><th>Nama</th><th>NIP</th><th>H</th><th>I</th><th>S</th><th>A</th><th>%</th></tr></thead><tbody>`;
             db.guru.forEach((g, i) => {
                 const abs = filtered.filter(a => a['Nama Guru'] === g['Nama Guru']);
                 let h=0, iz=0, sk=0, a=0;
                 abs.forEach(ab => { const st = String(ab.Status).charAt(0); if(st==="H") h++; else if(st==="I") iz++; else if(st==="S") sk++; else if(st==="A") a++; });
                 const total = h+iz+sk+a;
-                html += `<tr><td>${i+1}</td><td>${g['Nama Guru']}</td><td>${g.NIP}</td><td>${h}</td><td>${iz}</td><td>${sk}</td><td>${a}</td><td>${total>0?Math.round(h/total*100):0}%</td></tr>`;
+                html += `<tr><td class="text-center">${i+1}</td><td>${g['Nama Guru']}</td><td>${g.NIP}</td><td class="text-center">${h}</td><td class="text-center">${iz}</td><td class="text-center">${sk}</td><td class="text-center">${a}</td><td class="text-center">${total>0?Math.round(h/total*100):0}%</td></tr>`;
             });
-            html += `</tbody></table>`;
-            Swal.fire({ title: "Laporan Absensi Guru", html: html, width: "800px" });
+            html += `</tbody></table></div>`;
+            Swal.fire({ title: "Laporan Absensi Guru", html: html, width: "900px" });
         }
         
         function laporanNilai(tipe) {
             const kelas = document.getElementById("laporan-nilai-kelas").value;
             const mapel = document.getElementById("laporan-nilai-mapel").value;
-            if (!kelas || !mapel) { Swal.fire("Peringatan", "Pilih kelas dan mapel!", "warning"); return; }
+            if (!kelas || !mapel) { 
+                Swal.fire("Peringatan", "Pilih kelas dan mapel!", "warning"); 
+                return; 
+            }
             const siswaList = db.siswa.filter(s => s.Kelas === kelas);
             const nilaiData = db.nilai.filter(n => n.Kelas === kelas && n.Mapel === mapel);
             const jenisList = [...new Set(nilaiData.map(n => n.Jenis))];
-            let html = `<table class="admin-table"><thead><tr><th>No</th><th>Nama</th>${jenisList.map(j => `<th>${j}</th>`).join("")}<th>Rata</th></tr></thead><tbody>`;
+            let html = `<div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th>No</th><th>Nama</th>${jenisList.map(j => `<th>${j}</th>`).join("")}<th>Rata</th> </tr></thead><tbody>`;
             siswaList.forEach((s, i) => {
                 const nilaiSiswa = nilaiData.filter(n => String(n.ID_Siswa) === String(s.ID) || String(n.ID_Siswa) === String(s.NISN));
                 let total = 0, count = 0;
-                html += `<tr><td>${i+1}</td><td>${s['Nama Siswa']}</td>`;
+                html += `<tr><td class="text-center">${i+1}</td><td>${s['Nama Siswa']}</td>`;
                 jenisList.forEach(j => {
                     const n = nilaiSiswa.find(n => n.Jenis === j);
                     const val = n && n.Nilai ? parseFloat(n.Nilai) : 0;
                     if (val > 0) { total += val; count++; }
-                    html += `<td>${val || "-"}</td>`;
+                    html += `<td class="text-center">${val || "-"}</td>`;
                 });
-                html += `<td>${count>0 ? (total/count).toFixed(1) : "0"}</td></tr>`;
+                html += `<td class="text-center">${count>0 ? (total/count).toFixed(1) : "0"}</td></tr>`;
             });
-            html += `</tbody></table>`;
-            Swal.fire({ title: "Laporan Nilai", html: html, width: "800px" });
+            html += `</tbody></table></div>`;
+            Swal.fire({ title: "Laporan Nilai", html: html, width: "900px" });
         }
         
         function laporanPelanggaran() {
             const kelas = document.getElementById("laporan-pelanggaran-kelas").value;
             let filtered = db.pelanggaran;
             if (kelas) filtered = filtered.filter(p => p.Kelas === kelas);
-            let html = `<table class="admin-table"><thead><tr><th>No</th><th>Siswa</th><th>Kelas</th><th>Pelanggaran</th><th>Poin</th><th>Tanggal</th></tr></thead><tbody>`;
+            let html = `<div class="overflow-x-auto"><table class="admin-table"><thead> <tr><th>No</th><th>Siswa</th><th>Kelas</th><th>Pelanggaran</th><th>Poin</th><th>Tanggal</th> </tr></thead><tbody>`;
             filtered.forEach((p, i) => {
-                html += `<tr><td>${i+1}</td><td>${p['Nama Siswa']}</td><td>${p.Kelas}</td><td>${p.Pelanggaran}</td><td>${p.Poin}</td><td>${p.Tanggal}</td></tr>`;
+                html += `<tr><td class="text-center">${i+1}</td><td>${p['Nama Siswa']}</td><td>${p.Kelas}</td><td>${p.Pelanggaran}</td><td class="text-center">${p.Poin}</td><td>${p.Tanggal}</td></tr>`;
             });
-            html += `</tbody></table>`;
-            Swal.fire({ title: "Laporan Pelanggaran", html: html, width: "800px" });
+            html += `</tbody></table></div>`;
+            Swal.fire({ title: "Laporan Pelanggaran", html: html, width: "900px" });
         }
         
         // ============================================
@@ -1522,6 +1731,7 @@
             }
             if (pageId === "dashboard") updateStats();
             if (pageId === "kartu") toggleKartuJenis();
+            if (pageId === "pengaturan") applyConfigToForm();
         }
         
         function toggleSidebar() {
@@ -1546,17 +1756,13 @@
             });
         });
         
-        document.querySelectorAll("[data-tab]").forEach(btn => {
-            btn.addEventListener("click", () => switchAbsenJenis(btn.dataset.tab));
-        });
-        
         // Set default dates
-        const today = new Date().toISOString().split("T")[0];
-        if (document.getElementById("absensi-siswa-tanggal")) document.getElementById("absensi-siswa-tanggal").value = today;
-        if (document.getElementById("absensi-guru-tanggal")) document.getElementById("absensi-guru-tanggal").value = today;
-        if (document.getElementById("agenda-tanggal")) document.getElementById("agenda-tanggal").value = today;
-        if (document.getElementById("bimbingan-tanggal")) document.getElementById("bimbingan-tanggal").value = today;
-        if (document.getElementById("pelanggaran-tanggal")) document.getElementById("pelanggaran-tanggal").value = today;
+        const todayDate = new Date().toISOString().split("T")[0];
+        if (document.getElementById("absensi-siswa-tanggal")) document.getElementById("absensi-siswa-tanggal").value = todayDate;
+        if (document.getElementById("absensi-guru-tanggal")) document.getElementById("absensi-guru-tanggal").value = todayDate;
+        if (document.getElementById("agenda-tanggal")) document.getElementById("agenda-tanggal").value = todayDate;
+        if (document.getElementById("bimbingan-tanggal")) document.getElementById("bimbingan-tanggal").value = todayDate;
+        if (document.getElementById("pelanggaran-tanggal")) document.getElementById("pelanggaran-tanggal").value = todayDate;
         
         // Dark mode
         if (localStorage.getItem("darkMode") === "true") {
